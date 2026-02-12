@@ -1,0 +1,10 @@
+/build
+*.iml
+/.idea
+/local.properties
+/.settings
+/.classpath
+/.project
+.DS_Store
+/captures
+/externalNativeBuild
