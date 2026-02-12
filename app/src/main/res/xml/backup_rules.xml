@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <exclude domain="sharedpreferences" path="debug_preferences.xml"/>
+    <exclude domain="cache"/>
+    <exclude domain="file" path="media"/>
+</full-backup-content>

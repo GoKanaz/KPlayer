@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.KPlayer" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/splash_background</item>
+        <item name="android:colorPrimary">#FF6200EE</item>
+        <item name="android:colorPrimaryDark">#FF3700B3</item>
+        <item name="android:colorAccent">#FF03DAC5</item>
+    </style>
+    
+    <style name="Theme.KPlayer.Crash" parent="Theme.KPlayer">
+        <item name="android:windowBackground">@color/ic_launcher_background</item>
+    </style>
+</resources>
