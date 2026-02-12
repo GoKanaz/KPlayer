@@ -1,4 +1,6 @@
 rootProject.name = "KPlayer"
 include(":app")
-include(":core:media")
 include(":core:common")
+include(":core:media")
+include(":core:data")
+include(":core:domain")
