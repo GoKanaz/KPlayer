@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package dev.gokanaz.kplayer.core.datastore;
+
+option java_package = "dev.gokanaz.kplayer.core.datastore.proto";
+option java_multiple_files = true;
+
+message PlaybackHistoryItemProto {
+  string video_id = 1;
+  string video_title = 2;
+  optional string thumbnail_path = 3;
+  int64 watched_at = 4;
+  int64 position_ms = 5;
+  int64 duration_ms = 6;
+}
+
+message PlayerSettingsProto {
+  float playback_speed = 1;
+  int32 default_quality = 2;
+  bool auto_play = 3;
+  int32 repeat_mode = 4;
+  bool shuffle_mode = 5;
+  
+  float volume = 6;
+  bool mute = 7;
+  bool equalizer_enabled = 8;
+  repeated int32 equalizer_bands = 9;
+  
+  bool subtitles_enabled = 10;
+  string subtitle_language = 11;
+  int32 subtitle_size = 12;
+  string subtitle_font = 13;
+  
+  bool seek_gesture_enabled = 14;
+  bool volume_gesture_enabled = 15;
+  bool brightness_gesture_enabled = 16;
+  
+  bool pip_enabled = 17;
+  bool background_play_enabled = 18;
+  
+  map<string, int64> resume_positions = 19;
+  repeated PlaybackHistoryItemProto history = 20;
+}
