@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="debug_menu_title">Developer Options</string>
+    <string name="debug_menu_mock_data">Use Mock Data</string>
+    <string name="debug_menu_show_borders">Show Layout Borders</string>
+    <string name="debug_menu_inspector">Open Layout Inspector</string>
+    <string name="debug_menu_animation_speed">Animation Speed</string>
+    <string name="debug_menu_theme_override">Force Dark Theme</string>
+    <string name="debug_preview_sample_video_title">Sample Video Title</string>
+    <string name="debug_preview_sample_folder_name">Sample Folder</string>
+    <string name="debug_preview_sample_duration">12:34</string>
+    <string name="debug_preview_sample_size">128 MB</string>
+</resources>
