@@ -1,15 +1,1 @@
 /build
-*.iml
-/.idea
-/local.properties
-/.settings
-/.classpath
-/.project
-.DS_Store
-/captures
-/externalNativeBuild
-/release
-/debug
-keystore.properties
-*.keystore
-*.jks
