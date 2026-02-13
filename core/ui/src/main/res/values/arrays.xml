@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="sort_types">
+        <item>Name</item>
+        <item>Date</item>
+        <item>Size</item>
+        <item>Duration</item>
+        <item>Type</item>
+    </string-array>
+    
+    <string-array name="sort_type_values">
+        <item>name</item>
+        <item>date</item>
+        <item>size</item>
+        <item>duration</item>
+        <item>type</item>
+    </string-array>
+    
+    <string-array name="sort_orders">
+        <item>Ascending</item>
+        <item>Descending</item>
+    </string-array>
+    
+    <string-array name="sort_order_values">
+        <item>asc</item>
+        <item>desc</item>
+    </string-array>
+    
+    <string-array name="playback_speeds">
+        <item>0.25x</item>
+        <item>0.5x</item>
+        <item>0.75x</item>
+        <item>1.0x</item>
+        <item>1.25x</item>
+        <item>1.5x</item>
+        <item>1.75x</item>
+        <item>2.0x</item>
+    </string-array>
+    
+    <string-array name="playback_speed_values">
+        <item>0.25</item>
+        <item>0.5</item>
+        <item>0.75</item>
+        <item>1.0</item>
+        <item>1.25</item>
+        <item>1.5</item>
+        <item>1.75</item>
+        <item>2.0</item>
+    </string-array>
+    
+    <string-array name="video_qualities">
+        <item>Auto</item>
+        <item>144p</item>
+        <item>240p</item>
+        <item>360p</item>
+        <item>480p</item>
+        <item>720p</item>
+        <item>1080p</item>
+        <item>1440p</item>
+        <item>2160p</item>
+    </string-array>
+    
+    <string-array name="video_quality_values">
+        <item>-1</item>
+        <item>144</item>
+        <item>240</item>
+        <item>360</item>
+        <item>480</item>
+        <item>720</item>
+        <item>1080</item>
+        <item>1440</item>
+        <item>2160</item>
+    </string-array>
+    
+    <string-array name="repeat_modes">
+        <item>None</item>
+        <item>One</item>
+        <item>All</item>
+    </string-array>
+    
+    <string-array name="repeat_mode_values">
+        <item>none</item>
+        <item>one</item>
+        <item>all</item>
+    </string-array>
+    
+    <string-array name="view_modes">
+        <item>Grid</item>
+        <item>List</item>
+        <item>Card</item>
+    </string-array>
+    
+    <string-array name="view_mode_values">
+        <item>grid</item>
+        <item>list</item>
+        <item>card</item>
+    </string-array>
+    
+    <string-array name="app_languages">
+        <item>System</item>
+        <item>English</item>
+        <item>Indonesian</item>
+        <item>Spanish</item>
+        <item>French</item>
+        <item>German</item>
+        <item>Japanese</item>
+        <item>Korean</item>
+        <item>Chinese</item>
+        <item>Hindi</item>
+        <item>Arabic</item>
+    </string-array>
+    
+    <string-array name="app_language_codes">
+        <item>auto</item>
+        <item>en</item>
+        <item>in</item>
+        <item>es</item>
+        <item>fr</item>
+        <item>de</item>
+        <item>ja</item>
+        <item>ko</item>
+        <item>zh</item>
+        <item>hi</item>
+        <item>ar</item>
+    </string-array>
+    
+    <string-array name="theme_modes">
+        <item>System</item>
+        <item>Light</item>
+        <item>Dark</item>
+    </string-array>
+    
+    <string-array name="theme_mode_values">
+        <item>system</item>
+        <item>light</item>
+        <item>dark</item>
+    </string-array>
+    
+    <string-array name="resume_options">
+        <item>Always</item>
+        <item>Ask</item>
+        <item>Never</item>
+    </string-array>
+    
+    <string-array name="resume_option_values">
+        <item>always</item>
+        <item>ask</item>
+        <item>never</item>
+    </string-array>
+    
+    <string-array name="seek_durations">
+        <item>5 seconds</item>
+        <item>10 seconds</item>
+        <item>15 seconds</item>
+        <item>30 seconds</item>
+    </string-array>
+    
+    <string-array name="seek_duration_values">
+        <item>5000</item>
+        <item>10000</item>
+        <item>15000</item>
+        <item>30000</item>
+    </string-array>
+    
+    <string-array name="double_tap_actions">
+        <item>Seek</item>
+        <item>Play/Pause</item>
+        <item>Zoom</item>
+        <item>None</item>
+    </string-array>
+    
+    <string-array name="double_tap_action_values">
+        <item>seek</item>
+        <item>play_pause</item>
+        <item>zoom</item>
+        <item>none</item>
+    </string-array>
+    
+    <string-array name="equalizer_presets">
+        <item>Normal</item>
+        <item>Classical</item>
+        <item>Dance</item>
+        <item>Flat</item>
+        <item>Folk</item>
+        <item>Heavy Metal</item>
+        <item>Hip Hop</item>
+        <item>Jazz</item>
+        <item>Pop</item>
+        <item>Rock</item>
+        <item>Custom</item>
+    </string-array>
+    
+    <string-array name="equalizer_preset_values">
+        <item>normal</item>
+        <item>classical</item>
+        <item>dance</item>
+        <item>flat</item>
+        <item>folk</item>
+        <item>heavy_metal</item>
+        <item>hip_hop</item>
+        <item>jazz</item>
+        <item>pop</item>
+        <item>rock</item>
+        <item>custom</item>
+    </string-array>
+</resources>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="spacing_none">0dp</dimen>
+    <dimen name="spacing_extra_small">2dp</dimen>
+    <dimen name="spacing_small">4dp</dimen>
+    <dimen name="spacing_medium">8dp</dimen>
+    <dimen name="spacing_large">12dp</dimen>
+    <dimen name="spacing_extra_large">16dp</dimen>
+    <dimen name="spacing_huge">24dp</dimen>
+    <dimen name="spacing_extra_huge">32dp</dimen>
+    <dimen name="spacing_massive">48dp</dimen>
+    <dimen name="spacing_extra_massive">64dp</dimen>
+    
+    <dimen name="radius_none">0dp</dimen>
+    <dimen name="radius_extra_small">2dp</dimen>
+    <dimen name="radius_small">4dp</dimen>
+    <dimen name="radius_medium">8dp</dimen>
+    <dimen name="radius_large">12dp</dimen>
+    <dimen name="radius_extra_large">16dp</dimen>
+    <dimen name="radius_circle">1000dp</dimen>
+    
+    <dimen name="elevation_none">0dp</dimen>
+    <dimen name="elevation_tiny">1dp</dimen>
+    <dimen name="elevation_small">2dp</dimen>
+    <dimen name="elevation_medium">4dp</dimen>
+    <dimen name="elevation_large">6dp</dimen>
+    <dimen name="elevation_extra_large">8dp</dimen>
+    <dimen name="elevation_dialog">16dp</dimen>
+    <dimen name="elevation_drawer">16dp</dimen>
+    <dimen name="elevation_snackbar">6dp</dimen>
+    
+    <dimen name="icon_size_extra_small">16dp</dimen>
+    <dimen name="icon_size_small">18dp</dimen>
+    <dimen name="icon_size_medium">20dp</dimen>
+    <dimen name="icon_size_large">24dp</dimen>
+    <dimen name="icon_size_extra_large">32dp</dimen>
+    <dimen name="icon_size_huge">40dp</dimen>
+    <dimen name="icon_size_massive">48dp</dimen>
+    
+    <dimen name="text_size_caption">12sp</dimen>
+    <dimen name="text_size_body_small">14sp</dimen>
+    <dimen name="text_size_body_medium">16sp</dimen>
+    <dimen name="text_size_body_large">18sp</dimen>
+    <dimen name="text_size_title_small">20sp</dimen>
+    <dimen name="text_size_title_medium">24sp</dimen>
+    <dimen name="text_size_title_large">28sp</dimen>
+    <dimen name="text_size_headline">32sp</dimen>
+    <dimen name="text_size_display">40sp</dimen>
+    
+    <dimen name="player_controls_height">48dp</dimen>
+    <dimen name="player_seekbar_height">4dp</dimen>
+    <dimen name="player_thumb_size">20dp</dimen>
+    <dimen name="player_button_size">40dp</dimen>
+    <dimen name="player_volume_slider_width">120dp</dimen>
+    <dimen name="player_bottom_sheet_peek">80dp</dimen>
+    
+    <dimen name="grid_column_count_portrait">3</dimen>
+    <dimen name="grid_column_count_landscape">5</dimen>
+    <dimen name="grid_item_spacing">4dp</dimen>
+    <dimen name="grid_item_corner_radius">8dp</dimen>
+    <dimen name="thumbnail_height">180dp</dimen>
+</resources>
