@@ -4,7 +4,7 @@ import dev.gokanaz.kplayer.core.data.repository.PreferencesRepository
 import dev.gokanaz.kplayer.core.datastore.datasource.DarkMode
 import dev.gokanaz.kplayer.core.datastore.datasource.AppLanguage
 import dev.gokanaz.kplayer.core.datastore.datasource.ViewType
-import dev.gokanaz.kplayer.core.datastore.datasource.VideoQuality
+import dev.gokanaz.kplayer.core.model.media.VideoQuality
 import dev.gokanaz.kplayer.core.datastore.datasource.RepeatMode
 import dev.gokanaz.kplayer.core.datastore.datasource.PlaybackHistoryItem
 import dev.gokanaz.kplayer.core.domain.SortType

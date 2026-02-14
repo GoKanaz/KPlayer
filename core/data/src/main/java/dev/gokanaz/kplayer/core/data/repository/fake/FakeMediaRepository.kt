@@ -10,12 +10,12 @@ import dev.gokanaz.kplayer.core.domain.Playlist
 import dev.gokanaz.kplayer.core.domain.Result
 import dev.gokanaz.kplayer.core.domain.SortOrder
 import dev.gokanaz.kplayer.core.domain.SortType
-import dev.gokanaz.kplayer.core.domain.Video
+import dev.gokanaz.kplayer.core.model.Video
 import dev.gokanaz.kplayer.core.domain.VideoFilter
 import dev.gokanaz.kplayer.core.model.media.VideoQuality
-import dev.gokanaz.kplayer.core.domain.VideoStreamInfo
-import dev.gokanaz.kplayer.core.domain.AudioStreamInfo
-import dev.gokanaz.kplayer.core.domain.SubtitleStreamInfo
+import dev.gokanaz.kplayer.core.model.media.VideoStreamInfo
+import dev.gokanaz.kplayer.core.model.media.AudioStreamInfo
+import dev.gokanaz.kplayer.core.model.media.SubtitleStreamInfo
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
