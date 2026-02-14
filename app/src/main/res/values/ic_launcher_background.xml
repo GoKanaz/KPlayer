@@ -2,5 +2,4 @@
 <resources>
     <color name="ic_launcher_background">#FF6200EE</color>
     <color name="splash_background">#FF6200EE</color>
-    <color name="app_name">KPlayer</color>
 </resources>
