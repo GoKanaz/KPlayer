@@ -44,7 +44,7 @@ import androidx.compose.material.icons.filled.PictureInPicture
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.PlaylistAdd
 import androidx.compose.material.icons.filled.PlaylistPlay
-import androidx.compose.material.icons.filled.Quality
+import androidx.compose.material.icons.filled.Hd
 import androidx.compose.material.icons.filled.Repeat
 import androidx.compose.material.icons.filled.RepeatOne
 import androidx.compose.material.icons.filled.Search
@@ -96,7 +96,7 @@ import androidx.compose.material.icons.outlined.PictureInPicture
 import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.material.icons.outlined.PlaylistAdd
 import androidx.compose.material.icons.outlined.PlaylistPlay
-import androidx.compose.material.icons.outlined.Quality
+import androidx.compose.material.icons.outlined.Hd
 import androidx.compose.material.icons.outlined.Repeat
 import androidx.compose.material.icons.outlined.RepeatOne
 import androidx.compose.material.icons.outlined.Search
@@ -148,7 +148,7 @@ sealed class NextIcon(
     object VolumeMute : NextIcon(Icons.Filled.VolumeMute, Icons.Outlined.VolumeMute)
     object VolumeOff : NextIcon(Icons.Filled.VolumeOff, Icons.Outlined.VolumeOff)
     object Subtitles : NextIcon(Icons.Filled.Subtitles, Icons.Outlined.Subtitles)
-    object Quality : NextIcon(Icons.Filled.Quality, Icons.Outlined.Quality)
+    object Quality : NextIcon(Icons.Filled.Hd, Icons.Outlined.Hd)
     object Speed : NextIcon(Icons.Filled.Speed, Icons.Outlined.Speed)
     object Fullscreen : NextIcon(Icons.Filled.Fullscreen, Icons.Outlined.Fullscreen)
     object FullscreenExit : NextIcon(Icons.Filled.FullscreenExit, Icons.Outlined.FullscreenExit)
