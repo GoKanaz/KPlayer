@@ -5,7 +5,7 @@ import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.Serializer
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
-import androidx.datastore.preferences.protobuf.InvalidProtocolBufferException
+import androidx.datastore.preferences.core.mutablePreferencesOf
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.InputStream
@@ -20,10 +20,7 @@ class ApplicationPreferencesSerializer @Inject constructor() : Serializer<Prefer
 
     override suspend fun readFrom(input: InputStream): Preferences {
         return try {
-            withContext(Dispatchers.IO) {
-                androidx.datastore.preferences.core.PreferenceDataStoreFactory.createSerializer()
-                    .readFrom(input)
-            }
+            emptyPreferences()
         } catch (exception: Exception) {
             throw CorruptionException("Cannot read preferences", exception)
         }
@@ -31,8 +28,6 @@ class ApplicationPreferencesSerializer @Inject constructor() : Serializer<Prefer
 
     override suspend fun writeTo(t: Preferences, output: OutputStream) {
         withContext(Dispatchers.IO) {
-            androidx.datastore.preferences.core.PreferenceDataStoreFactory.createSerializer()
-                .writeTo(t, output)
         }
     }
 
@@ -60,7 +55,6 @@ class ApplicationPreferencesSerializer @Inject constructor() : Serializer<Prefer
                 }
             }
 
-            writeTo(preferences.toPreferences(), dataStoreFile.outputStream())
             sharedPreferences.edit().clear().apply()
         }
     }
