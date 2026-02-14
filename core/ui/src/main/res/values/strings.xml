@@ -261,4 +261,9 @@
     <string name="date_format_long"><![CDATA[%B %d, %Y]]></string>
     <string name="time_format"><![CDATA[%I:%M %p]]></string>
     <string name="datetime_format"><![CDATA[%B %d, %Y • %I:%M %p]]></string>
+    <string name="permission_open_settings">Open Settings</string>
+    <string name="permission_missing">%s permission is required</string>
+    <string name="permission_grant">Grant Permission</string>
+    <string name="permission_continue">Continue</string>
+    <string name="permission_cancel">Cancel</string>
 </resources>
