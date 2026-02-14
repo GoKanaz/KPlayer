@@ -1,6 +1,5 @@
 package dev.gokanaz.kplayer.core.data.repository.fake
 
-import android.net.Uri
 import dev.gokanaz.kplayer.core.data.models.VideoState
 import dev.gokanaz.kplayer.core.data.repository.MediaRepository
 import dev.gokanaz.kplayer.core.domain.Folder
@@ -12,7 +11,6 @@ import dev.gokanaz.kplayer.core.domain.SortOrder
 import dev.gokanaz.kplayer.core.domain.SortType
 import dev.gokanaz.kplayer.core.model.Video
 import dev.gokanaz.kplayer.core.domain.VideoFilter
-import dev.gokanaz.kplayer.core.model.media.VideoQuality
 import dev.gokanaz.kplayer.core.model.media.VideoStreamInfo
 import dev.gokanaz.kplayer.core.model.media.AudioStreamInfo
 import dev.gokanaz.kplayer.core.model.media.SubtitleStreamInfo
@@ -254,9 +252,8 @@ class FakeMediaRepository @Inject constructor() : MediaRepository {
                 width = 1920,
                 height = 1080,
                 bitrate = 5000000,
-                frameRate = 30f,
-                codec = "h264",
-                quality = VideoQuality.P1080
+                frameRate = 30.0,
+                codec = "h264"
             )
         )
     }
@@ -268,7 +265,7 @@ class FakeMediaRepository @Inject constructor() : MediaRepository {
                     bitrate = 128000,
                     sampleRate = 44100,
                     codec = "aac",
-                    channelCount = 2,
+                    channels = 2,
                     language = "en"
                 )
             )
@@ -287,7 +284,9 @@ class FakeMediaRepository @Inject constructor() : MediaRepository {
             Video(
                 id = "1",
                 title = "Sample Video 1",
-                uri = Uri.parse("content://media/video/1"),
+                fileName = "sample_video_1.mp4",
+                filePath = "/storage/emulated/0/Camera/sample_video_1.mp4",
+                uri = "content://media/video/1",
                 duration = 120000,
                 size = 15000000,
                 dateAdded = System.currentTimeMillis() - 86400000,
@@ -298,17 +297,14 @@ class FakeMediaRepository @Inject constructor() : MediaRepository {
                 bucketDisplayName = "Camera",
                 lastPlayedPosition = 30000,
                 isFavorite = true,
-                watchCount = 5,
-                lastPlayedAt = System.currentTimeMillis() - 3600000,
-                tags = setOf("vacation", "family"),
-                availableQualities = listOf(VideoQuality.P360, VideoQuality.P720, VideoQuality.P1080),
-                subtitleTracks = emptyList(),
-                audioTracks = emptyList()
+                watchCount = 5
             ),
             Video(
                 id = "2",
                 title = "Sample Video 2",
-                uri = Uri.parse("content://media/video/2"),
+                fileName = "sample_video_2.mp4",
+                filePath = "/storage/emulated/0/Camera/sample_video_2.mp4",
+                uri = "content://media/video/2",
                 duration = 180000,
                 size = 22000000,
                 dateAdded = System.currentTimeMillis() - 172800000,
@@ -319,17 +315,14 @@ class FakeMediaRepository @Inject constructor() : MediaRepository {
                 bucketDisplayName = "Camera",
                 lastPlayedPosition = 0,
                 isFavorite = false,
-                watchCount = 2,
-                lastPlayedAt = System.currentTimeMillis() - 86400000,
-                tags = setOf("tutorial"),
-                availableQualities = listOf(VideoQuality.P360, VideoQuality.P720),
-                subtitleTracks = emptyList(),
-                audioTracks = emptyList()
+                watchCount = 2
             ),
             Video(
                 id = "3",
                 title = "Sample Video 3",
-                uri = Uri.parse("content://media/video/3"),
+                fileName = "sample_video_3.mp4",
+                filePath = "/storage/emulated/0/Downloads/sample_video_3.mp4",
+                uri = "content://media/video/3",
                 duration = 300000,
                 size = 35000000,
                 dateAdded = System.currentTimeMillis() - 259200000,
@@ -340,12 +333,7 @@ class FakeMediaRepository @Inject constructor() : MediaRepository {
                 bucketDisplayName = "Downloads",
                 lastPlayedPosition = 0,
                 isFavorite = true,
-                watchCount = 1,
-                lastPlayedAt = System.currentTimeMillis() - 172800000,
-                tags = setOf("movie"),
-                availableQualities = listOf(VideoQuality.P720, VideoQuality.P1080, VideoQuality.P2160),
-                subtitleTracks = emptyList(),
-                audioTracks = emptyList()
+                watchCount = 1
             )
         )
         
