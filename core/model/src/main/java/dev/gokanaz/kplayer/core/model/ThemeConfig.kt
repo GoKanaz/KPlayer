@@ -1,3 +1,5 @@
+package dev.gokanaz.kplayer.core.model
+
 import dev.gokanaz.kplayer.core.model.ui.Font
 
 enum class DarkMode {

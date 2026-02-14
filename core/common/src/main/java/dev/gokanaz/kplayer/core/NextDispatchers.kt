@@ -32,13 +32,13 @@ object NextDispatchersModule {
     @Provides
     @Singleton
     fun provideDatabaseDispatcher(): CoroutineDispatcher =
-        newSingleThreadContext("DatabaseThread").asCoroutineDispatcher()
+        Executors.newSingleThreadExecutor { Thread(it, "DatabaseThread") }.asCoroutineDispatcher()
 
     @FileIODispatcher
     @Provides
     @Singleton
     fun provideFileIODispatcher(): CoroutineDispatcher =
-        newFixedThreadPoolContext(2, "FileIOThread").asCoroutineDispatcher()
+        Executors.newFixedThreadPool(2) { Thread(it, "FileIOThread") }.asCoroutineDispatcher()
 
     @MediaDispatcher
     @Provides
