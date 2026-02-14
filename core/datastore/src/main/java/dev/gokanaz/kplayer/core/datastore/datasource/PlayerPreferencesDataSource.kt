@@ -1,6 +1,7 @@
-import dev.gokanaz.kplayer.core.model.media.VideoQuality
 package dev.gokanaz.kplayer.core.datastore.datasource
 
+
+import dev.gokanaz.kplayer.core.model.media.VideoQuality
 import androidx.datastore.core.DataStore
 import dev.gokanaz.kplayer.core.datastore.proto.PlaybackHistoryItemProto
 import dev.gokanaz.kplayer.core.datastore.proto.PlayerSettingsProto
