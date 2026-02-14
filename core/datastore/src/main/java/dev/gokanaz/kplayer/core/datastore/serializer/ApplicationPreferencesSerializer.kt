@@ -5,8 +5,7 @@ import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.Serializer
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
-import androidx.datastore.preferences.preferencesDataStoreFile
-import com.google.protobuf.InvalidProtocolBufferException
+import androidx.datastore.preferences.protobuf.InvalidProtocolBufferException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.InputStream
@@ -16,40 +15,37 @@ import javax.inject.Singleton
 
 @Singleton
 class ApplicationPreferencesSerializer @Inject constructor() : Serializer<Preferences> {
-    
+
     override val defaultValue: Preferences = emptyPreferences()
-    
+
     override suspend fun readFrom(input: InputStream): Preferences {
-        try {
-            return withContext(Dispatchers.IO) {
-                Preferences.Adapter.readFrom(input)
+        return try {
+            withContext(Dispatchers.IO) {
+                androidx.datastore.preferences.core.PreferenceDataStoreFactory.createSerializer()
+                    .readFrom(input)
             }
-        } catch (exception: InvalidProtocolBufferException) {
-            throw CorruptionException("Cannot read proto", exception)
+        } catch (exception: Exception) {
+            throw CorruptionException("Cannot read preferences", exception)
         }
     }
-    
+
     override suspend fun writeTo(t: Preferences, output: OutputStream) {
         withContext(Dispatchers.IO) {
-            Preferences.Adapter.writeTo(t, output)
+            androidx.datastore.preferences.core.PreferenceDataStoreFactory.createSerializer()
+                .writeTo(t, output)
         }
     }
-    
+
     suspend fun migrateFromSharedPreferences(
         sharedPreferences: SharedPreferences,
         dataStoreFile: java.io.File
     ) {
         withContext(Dispatchers.IO) {
-            val prefsFile = preferencesDataStoreFile("app_preferences")
-            if (!prefsFile.exists() && dataStoreFile.exists()) {
-                return@withContext
-            }
-            
             val allPrefs = sharedPreferences.all
             if (allPrefs.isEmpty()) return@withContext
-            
+
             val preferences = defaultValue.toMutablePreferences()
-            
+
             allPrefs.forEach { (key, value) ->
                 when (value) {
                     is String -> preferences[androidx.datastore.preferences.core.stringPreferencesKey(key)] = value
@@ -63,7 +59,7 @@ class ApplicationPreferencesSerializer @Inject constructor() : Serializer<Prefer
                     }
                 }
             }
-            
+
             writeTo(preferences.toPreferences(), dataStoreFile.outputStream())
             sharedPreferences.edit().clear().apply()
         }

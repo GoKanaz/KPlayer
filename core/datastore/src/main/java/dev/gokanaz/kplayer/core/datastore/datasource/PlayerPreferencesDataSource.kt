@@ -5,6 +5,7 @@ import dev.gokanaz.kplayer.core.datastore.proto.PlaybackHistoryItemProto
 import dev.gokanaz.kplayer.core.datastore.proto.PlayerSettingsProto
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.io.IOException
 import javax.inject.Inject
