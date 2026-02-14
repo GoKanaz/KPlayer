@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -43,7 +44,7 @@ fun NextTopAppBar(
             )
         },
         modifier = modifier.shadow(elevation = 4.dp),
-        navigationIcon = navigationIcon,
+        navigationIcon = navigationIcon ?: {},
         actions = actions,
         scrollBehavior = scrollBehavior,
         colors = TopAppBarDefaults.topAppBarColors(
@@ -73,7 +74,7 @@ fun NextLargeTopAppBar(
             )
         },
         modifier = modifier,
-        navigationIcon = navigationIcon,
+        navigationIcon = navigationIcon ?: {},
         actions = actions,
         scrollBehavior = scrollBehavior,
         colors = TopAppBarDefaults.largeTopAppBarColors(
@@ -158,9 +159,9 @@ fun NextSearchBar(
                 disabledPlaceholderColor = AppTheme.colorScheme.onSurface.copy(alpha = 0.38f),
                 cursorColor = AppTheme.colorScheme.primary,
                 errorCursorColor = AppTheme.colorScheme.error,
-                selectionColors = TextFieldDefaults.colors().selectionColors
+                selectionColors = LocalTextSelectionColors.current
             )
         ),
-        content = content
+        content = { content() }
     )
 }
