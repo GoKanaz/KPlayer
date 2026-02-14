@@ -12,7 +12,7 @@ import dev.gokanaz.kplayer.core.domain.SortOrder
 import dev.gokanaz.kplayer.core.domain.SortType
 import dev.gokanaz.kplayer.core.domain.Video
 import dev.gokanaz.kplayer.core.domain.VideoFilter
-import dev.gokanaz.kplayer.core.domain.VideoQuality
+import dev.gokanaz.kplayer.core.model.media.VideoQuality
 import dev.gokanaz.kplayer.core.domain.VideoStreamInfo
 import dev.gokanaz.kplayer.core.domain.AudioStreamInfo
 import dev.gokanaz.kplayer.core.domain.SubtitleStreamInfo
