@@ -254,13 +254,13 @@
     <string name="unknown_folder">Unknown Folder</string>
     <string name="untitled_playlist">Untitled Playlist</string>
     
-    <string name="duration_format_hms"><![CDATA[%02d:%02d:%02d]]></string>
-    <string name="duration_format_ms"><![CDATA[%02d:%02d]]></string>
-    <string name="file_size_format"><![CDATA[%.2f %s]]></string>
-    <string name="date_format_short"><![CDATA[%d/%m/%Y]]></string>
-    <string name="date_format_long"><![CDATA[%B %d, %Y]]></string>
-    <string name="time_format"><![CDATA[%I:%M %p]]></string>
-    <string name="datetime_format"><![CDATA[%B %d, %Y • %I:%M %p]]></string>
+    <string name="duration_format_hms" formatted="false"><![CDATA[%02d:%02d:%02d]]></string>
+    <string name="duration_format_ms" formatted="false"><![CDATA[%02d:%02d]]></string>
+    <string name="file_size_format" formatted="false"><![CDATA[%.2f %s]]></string>
+    <string name="date_format_short" formatted="false"><![CDATA[%d/%m/%Y]]></string>
+    <string name="date_format_long" formatted="false"><![CDATA[%B %d, %Y]]></string>
+    <string name="time_format" formatted="false"><![CDATA[%I:%M %p]]></string>
+    <string name="datetime_format" formatted="false"><![CDATA[%B %d, %Y • %I:%M %p]]></string>
     <string name="permission_open_settings">Open Settings</string>
     <string name="permission_missing">%s permission is required</string>
     <string name="permission_grant">Grant Permission</string>
