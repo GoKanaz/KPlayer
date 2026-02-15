@@ -2,32 +2,31 @@ package dev.gokanaz.kplayer.feature.videopicker.state
 
 import android.content.Context
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateMapOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.snapshots.SnapshotStateMap
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import dev.gokanaz.kplayer.core.domain.usecase.DeleteVideosUseCase
 import dev.gokanaz.kplayer.core.domain.usecase.ShareVideosUseCase
 import dev.gokanaz.kplayer.core.model.Video
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * Manager class for handling selection state of items
- */
 @Stable
 class SelectionManager(
     private val deleteVideosUseCase: DeleteVideosUseCase,
     private val shareVideosUseCase: ShareVideosUseCase,
     private val context: Context
 ) {
+    
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     
     private val _selectedItems = MutableStateFlow<Set<String>>(emptySet())
     val selectedItems: StateFlow<Set<String>> = _selectedItems.asStateFlow()
@@ -38,7 +37,7 @@ class SelectionManager(
     private val _selectable = MutableStateFlow(true)
     val selectable: StateFlow<Boolean> = _selectable.asStateFlow()
     
-    private val itemMap = mutableStateMapOf<String, Any>()
+    private val itemMap = mutableMapOf<String, Any>()
     
     val selectedCount: Int
         get() = _selectedItems.value.size
@@ -46,9 +45,6 @@ class SelectionManager(
     val hasSelection: Boolean
         get() = _selectedItems.value.isNotEmpty()
     
-    /**
-     * Toggle selection of an item
-     */
     fun toggleSelection(itemId: String) {
         if (!_selectable.value) return
         
@@ -67,9 +63,6 @@ class SelectionManager(
         }
     }
     
-    /**
-     * Select a single item
-     */
     fun selectItem(itemId: String) {
         if (!_selectable.value) return
         
@@ -79,9 +72,6 @@ class SelectionManager(
         _selectionMode.value = true
     }
     
-    /**
-     * Deselect a single item
-     */
     fun deselectItem(itemId: String) {
         val current = _selectedItems.value.toMutableSet()
         current.remove(itemId)
@@ -92,9 +82,6 @@ class SelectionManager(
         }
     }
     
-    /**
-     * Select all items
-     */
     fun selectAll(items: List<Any>) {
         if (!_selectable.value) return
         
@@ -107,7 +94,6 @@ class SelectionManager(
         _selectedItems.value = ids.toSet()
         _selectionMode.value = ids.isNotEmpty()
         
-        // Store items for later use
         items.forEach { item ->
             when (item) {
                 is Video -> itemMap[item.id] = item
@@ -115,63 +101,39 @@ class SelectionManager(
         }
     }
     
-    /**
-     * Deselect all items
-     */
     fun deselectAll() {
         _selectedItems.value = emptySet()
         _selectionMode.value = false
         itemMap.clear()
     }
     
-    /**
-     * Check if an item is selected
-     */
     fun isSelected(itemId: String): Boolean {
         return _selectedItems.value.contains(itemId)
     }
     
-    /**
-     * Get selected items as list
-     */
     fun getSelectedItems(): List<Any> {
         return _selectedItems.value.mapNotNull { id ->
             itemMap[id]
         }
     }
     
-    /**
-     * Get selected videos
-     */
     fun getSelectedVideos(): List<Video> {
         return getSelectedItems().filterIsInstance<Video>()
     }
     
-    /**
-     * Enter selection mode
-     */
     fun enterSelectionMode() {
         _selectionMode.value = true
     }
     
-    /**
-     * Exit selection mode
-     */
     fun exitSelectionMode() {
         _selectionMode.value = false
         deselectAll()
     }
     
-    /**
-     * Clear selection
-     */
     fun clearSelection() {
         deselectAll()
     }
     
-    /**
-     * Set selectable state
-     */
     fun setSelectable(selectable: Boolean) {
         _selectable.value = selectable
         if (!selectable) {
@@ -179,130 +141,83 @@ class SelectionManager(
         }
     }
     
-    /**
-     * Play selected videos
-     */
     fun playSelected() {
         val videos = getSelectedVideos()
         if (videos.isNotEmpty()) {
-            // Implementation would navigate to player with playlist
         }
     }
     
-    /**
-     * Add selected videos to playlist
-     */
     fun addToPlaylist(playlistId: String) {
         val videos = getSelectedVideos()
         if (videos.isNotEmpty()) {
-            // Implementation would add to playlist
         }
     }
     
-    /**
-     * Share selected videos
-     */
     fun shareSelected() {
         val videos = getSelectedVideos()
         if (videos.isNotEmpty()) {
-            viewModelScope.launch {
+            scope.launch {
                 try {
                     shareVideosUseCase(videos, context)
                 } catch (e: Exception) {
-                    // Handle error
                 }
             }
         }
     }
     
-    /**
-     * Share a single item
-     */
     fun shareItem(video: Video) {
-        viewModelScope.launch {
+        scope.launch {
             try {
                 shareVideosUseCase(listOf(video), context)
             } catch (e: Exception) {
-                // Handle error
             }
         }
     }
     
-    /**
-     * Delete selected videos
-     */
     fun deleteSelected(onConfirm: () -> Unit = {}) {
         val videos = getSelectedVideos()
         if (videos.isNotEmpty()) {
-            viewModelScope.launch {
+            scope.launch {
                 try {
                     deleteVideosUseCase(videos.map { it.id })
                     deselectAll()
                     onConfirm()
                 } catch (e: Exception) {
-                    // Handle error
                 }
             }
         }
     }
     
-    /**
-     * Delete a single item
-     */
     fun deleteItem(itemId: String, video: Video) {
-        viewModelScope.launch {
+        scope.launch {
             try {
                 deleteVideosUseCase(listOf(itemId))
                 deselectItem(itemId)
             } catch (e: Exception) {
-                // Handle error
             }
         }
     }
     
-    /**
-     * Add selected to favorites
-     */
     fun addToFavorites() {
         val videos = getSelectedVideos()
         if (videos.isNotEmpty()) {
-            // Implementation would add to favorites
         }
     }
     
-    /**
-     * Remove selected from favorites
-     */
     fun removeFromFavorites() {
         val videos = getSelectedVideos()
         if (videos.isNotEmpty()) {
-            // Implementation would remove from favorites
         }
     }
     
-    /**
-     * Observe selection changes
-     */
     fun observeSelection(): Flow<Set<String>> = selectedItems
     
-    /**
-     * Observe selection mode changes
-     */
     fun observeSelectionMode(): Flow<Boolean> = selectionMode
     
-    /**
-     * Get selected items count as flow
-     */
     val selectedCountFlow: Flow<Int> = selectedItems.map { it.size }
     
-    /**
-     * Check if any items are selected
-     */
     val hasSelectionFlow: Flow<Boolean> = selectedItems.map { it.isNotEmpty() }
     
-    /**
-     * Toggle all items
-     */
     fun toggleAll(items: List<Any>) {
         if (areAllSelected(items)) {
             deselectAll()
@@ -311,9 +226,6 @@ class SelectionManager(
         }
     }
     
-    /**
-     * Check if all items are selected
-     */
     fun areAllSelected(items: List<Any>): Boolean {
         val itemIds = items.mapNotNull { item ->
             when (item) {
@@ -324,9 +236,6 @@ class SelectionManager(
         return itemIds.isNotEmpty() && _selectedItems.value.containsAll(itemIds)
     }
     
-    /**
-     * Get selection statistics
-     */
     fun getSelectionStats(): SelectionStats {
         val videos = getSelectedVideos()
         return SelectionStats(
@@ -336,11 +245,6 @@ class SelectionManager(
         )
     }
     
-    /**
-     * ViewModel scope for coroutines
-     */
-    private val viewModelScope = androidx.lifecycle.viewModelScope
-    
     data class SelectionStats(
         val count: Int,
         val totalDuration: Long,
@@ -348,9 +252,6 @@ class SelectionManager(
     )
 }
 
-/**
- * Factory for creating SelectionManager instances
- */
 @Singleton
 class SelectionManagerFactory @Inject constructor(
     private val deleteVideosUseCase: DeleteVideosUseCase,
@@ -366,11 +267,8 @@ class SelectionManagerFactory @Inject constructor(
     }
 }
 
-/**
- * Hilt module for SelectionManager
- */
-@dagger.Module
-@dagger.hilt.InstallIn(dagger.hilt.components.SingletonComponent::class)
+@Module
+@InstallIn(SingletonComponent::class)
 object SelectionManagerModule {
     
     @Provides
@@ -388,9 +286,6 @@ object SelectionManagerModule {
     }
 }
 
-/**
- * Extension functions for SelectionManager
- */
 fun SelectionManager.getSelectedIds(): Set<String> = selectedItems.value
 
 fun SelectionManager.isInSelectionMode(): Boolean = selectionMode.value
