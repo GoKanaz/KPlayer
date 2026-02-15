@@ -16,8 +16,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface MediaRepository {
     fun getVideos(
-        sortType: SortType = SortType.Date,
-        sortOrder: SortOrder = SortOrder.Descending,
+        sortType: SortType = SortType.DATE,
+        sortOrder: SortOrder = SortOrder.DESCENDING,
         filter: VideoFilter? = null
     ): Flow<Result<List<Video>>>
     
@@ -27,7 +27,7 @@ interface MediaRepository {
     
     suspend fun getRecentVideos(limit: Int): Result<List<Video>>
     
-    fun getFolders(sortType: FolderSortType = FolderSortType.Name): Flow<Result<List<Folder>>>
+    fun getFolders(sortType: FolderSortType = FolderSortType.NAME): Flow<Result<List<Folder>>>
     
     suspend fun getFolderTree(): Result<FolderNode>
     

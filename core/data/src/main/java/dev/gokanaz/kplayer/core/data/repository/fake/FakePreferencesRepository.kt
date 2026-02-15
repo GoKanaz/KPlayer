@@ -24,8 +24,8 @@ class FakePreferencesRepository @Inject constructor() : PreferencesRepository {
     private val appLanguageFlow = MutableStateFlow(AppLanguage.AUTO)
     private val firstRunFlow = MutableStateFlow(true)
     private val onboardingCompletedFlow = MutableStateFlow(false)
-    private val defaultSortTypeFlow = MutableStateFlow<SortType>(SortType.Date)
-    private val defaultSortOrderFlow = MutableStateFlow<SortOrder>(SortOrder.Descending)
+    private val defaultSortTypeFlow = MutableStateFlow<SortType>(SortType.DATE)
+    private val defaultSortOrderFlow = MutableStateFlow<SortOrder>(SortOrder.DESCENDING)
     private val defaultViewTypeFlow = MutableStateFlow(ViewType.GRID)
     private val storagePermissionFlow = MutableStateFlow(false)
     private val storagePathsFlow = MutableStateFlow<List<String>>(emptyList())
@@ -175,8 +175,8 @@ class FakePreferencesRepository @Inject constructor() : PreferencesRepository {
         appLanguageFlow.value = AppLanguage.AUTO
         firstRunFlow.value = true
         onboardingCompletedFlow.value = false
-        defaultSortTypeFlow.value = SortType.Date
-        defaultSortOrderFlow.value = SortOrder.Descending
+        defaultSortTypeFlow.value = SortType.DATE
+        defaultSortOrderFlow.value = SortOrder.DESCENDING
         defaultViewTypeFlow.value = ViewType.GRID
         storagePermissionFlow.value = false
         storagePathsFlow.value = emptyList()
