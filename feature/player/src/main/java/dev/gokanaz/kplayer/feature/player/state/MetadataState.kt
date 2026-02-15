@@ -26,7 +26,7 @@ data class MetadataState(
 ) {
     companion object {
         val Initial = MetadataState()
-        
+
         val Sample = MetadataState(
             videoId = "123",
             title = "Sample Video",
@@ -46,19 +46,19 @@ data class MetadataState(
             thumbnailUri = "content://media/external/video/media/123/thumbnail"
         )
     }
-    
+
     fun withPosition(positionMs: Long): MetadataState {
         return copy(
             currentPosition = positionMs.coerceIn(0, duration)
         )
     }
-    
+
     fun withBufferedPosition(positionMs: Long): MetadataState {
         return copy(
             bufferedPosition = positionMs.coerceIn(0, duration)
         )
     }
-    
+
     fun withVideoInfo(video: dev.gokanaz.kplayer.core.model.Video): MetadataState {
         return copy(
             videoId = video.id,
@@ -73,35 +73,35 @@ data class MetadataState(
             mimeType = video.mimeType
         )
     }
-    
+
     fun formatDuration(): String {
         return duration.formatDuration()
     }
-    
+
     fun formatCurrentPosition(): String {
         return currentPosition.formatDuration()
     }
-    
+
     fun formatRemainingTime(): String {
         return (duration - currentPosition).coerceAtLeast(0).formatDuration()
     }
-    
+
     fun progressPercentage(): Float {
         return if (duration > 0) {
             (currentPosition.toFloat() / duration.toFloat()).coerceIn(0f, 1f)
         } else 0f
     }
-    
+
     fun bufferedPercentage(): Int {
         return if (duration > 0) {
             ((bufferedPosition.toFloat() / duration.toFloat()) * 100).toInt().coerceIn(0, 100)
         } else 0
     }
-    
+
     fun isNearEnd(thresholdMs: Long = 10000): Boolean {
         return duration - currentPosition <= thresholdMs
     }
-    
+
     fun getResolution(): String {
         return if (width > 0 && height > 0) {
             "${width}x${height}"
@@ -109,7 +109,7 @@ data class MetadataState(
             "Unknown"
         }
     }
-    
+
     fun getShortResolution(): String {
         return when {
             height >= 2160 -> "4K"
@@ -121,11 +121,24 @@ data class MetadataState(
             else -> "SD"
         }
     }
-    
+
     fun reset(): MetadataState {
         return copy(
             currentPosition = 0,
             bufferedPosition = 0
         )
+    }
+}
+
+fun Long.formatDuration(): String {
+    val totalSeconds = this / 1000
+    val hours = totalSeconds / 3600
+    val minutes = (totalSeconds % 3600) / 60
+    val seconds = totalSeconds % 60
+    
+    return if (hours > 0) {
+        String.format("%d:%02d:%02d", hours, minutes, seconds)
+    } else {
+        String.format("%d:%02d", minutes, seconds)
     }
 }

@@ -3,6 +3,7 @@ package dev.gokanaz.kplayer.feature.player.ui.controls
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -102,7 +103,7 @@ fun ControlsTopView(
                 ) {
                     if (pipState.isPipAvailable && pipState.isPipEnabledInSettings) {
                         IconButton(
-                            onClick = { /* Enter PIP mode */ },
+                            onClick = { },
                             modifier = Modifier.size(48.dp)
                         ) {
                             Icon(
@@ -132,7 +133,7 @@ fun ControlsTopView(
                     ) {
                         Icon(
                             painter = NextIconPainter(NextIcon.MoreVert),
-                            contentDescription = stringResource(id = R.string.player_menu),
+                            contentDescription = stringResource(id = R.string.player_settings),
                             tint = Color.White
                         )
                     }

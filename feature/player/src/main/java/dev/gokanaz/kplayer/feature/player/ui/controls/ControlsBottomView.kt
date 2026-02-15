@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imeNavigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -53,6 +52,9 @@ fun ControlsBottomView(
     tracksState: TracksState,
     metadataState: MetadataState,
     controlsState: ControlsVisibilityState,
+    isPlaying: Boolean,
+    repeatMode: LoopMode,
+    isShuffleEnabled: Boolean,
     onPlayPause: () -> Unit,
     onNext: () -> Unit,
     onPrevious: () -> Unit,
@@ -86,7 +88,7 @@ fun ControlsBottomView(
             modifier = modifier
                 .fillMaxWidth()
                 .background(gradientBrush)
-                .imeNavigationBarsPadding()
+                .padding(bottom = 16.dp)
         ) {
             Column(
                 modifier = Modifier
@@ -113,13 +115,13 @@ fun ControlsBottomView(
                         horizontalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
                         RepeatButton(
-                            repeatMode = playbackState.repeatMode,
-                            onClick = { onRepeatModeChange(playbackState.repeatMode.next()) }
+                            repeatMode = repeatMode,
+                            onClick = { onRepeatModeChange(repeatMode.next()) }
                         )
                         
                         ShuffleButton(
-                            isShuffleOn = playbackState.isShuffleEnabled,
-                            onClick = { onShuffleToggle(!playbackState.isShuffleEnabled) }
+                            isShuffleOn = isShuffleEnabled,
+                            onClick = { onShuffleToggle(!isShuffleEnabled) }
                         )
                     }
                     
@@ -140,7 +142,7 @@ fun ControlsBottomView(
                         }
                         
                         PlayPauseButton(
-                            isPlaying = playbackState.isPlaying,
+                            isPlaying = isPlaying,
                             onClick = onPlayPause,
                             modifier = Modifier.size(64.dp)
                         )

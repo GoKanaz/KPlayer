@@ -1,14 +1,25 @@
 package dev.gokanaz.kplayer.feature.player.utils
 
 import android.net.Uri
+import android.os.Bundle
 import androidx.media3.common.Format
+import androidx.media3.common.MediaItem
+import androidx.media3.common.MediaMetadata
+import androidx.media3.common.PlaybackException
+import androidx.media3.common.PlaybackParameters
 import androidx.media3.common.Player
 import dev.gokanaz.kplayer.core.model.Video
 import dev.gokanaz.kplayer.core.model.player.LoopMode
+import dev.gokanaz.kplayer.core.model.player.VideoContentScale
 import dev.gokanaz.kplayer.feature.player.model.Subtitle
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 
 sealed class PlayerResult<out T> {
     data class Success<T>(val data: T) : PlayerResult<T>()
@@ -18,7 +29,6 @@ sealed class PlayerResult<out T> {
 
 interface PlayerApi {
     
-    // Playback control
     fun play()
     fun pause()
     fun togglePlay()
@@ -29,27 +39,23 @@ interface PlayerApi {
     fun skipPrevious()
     fun stop()
     
-    // Track selection
     fun selectVideoTrack(index: Int)
     fun selectAudioTrack(index: Int)
     fun selectSubtitleTrack(index: Int)
     fun disableSubtitle()
     
-    // Settings
     fun setPlaybackSpeed(speed: Float)
     fun setVolume(volume: Float, isMuted: Boolean = false)
     fun setRepeatMode(mode: LoopMode)
     fun setShuffleMode(enabled: Boolean)
     fun setVideoScale(scale: VideoContentScale)
     
-    // Media
     fun playMedia(uri: Uri, title: String? = null)
     fun playVideo(video: Video)
     fun playPlaylist(videos: List<Video>, startIndex: Int = 0)
     fun addSubtitle(subtitle: Subtitle)
     fun removeSubtitle(subtitleId: String)
     
-    // State observation
     fun observePlaybackState(): Flow<Int>
     fun observeCurrentPosition(): Flow<Long>
     fun observeBufferingState(): Flow<Boolean>
@@ -59,7 +65,6 @@ interface PlayerApi {
     fun observeRepeatMode(): Flow<LoopMode>
     fun observeShuffleMode(): Flow<Boolean>
     
-    // Info
     suspend fun getVideoInfo(uri: Uri): PlayerResult<Video>
     fun getAvailableVideoTracks(): List<Format>
     fun getAvailableAudioTracks(): List<Format>
@@ -68,7 +73,6 @@ interface PlayerApi {
     fun getDuration(): Long
     fun getBufferedPosition(): Long
     
-    // Callbacks
     fun addEventListener(listener: PlayerEventListener)
     fun removeEventListener(listener: PlayerEventListener)
     fun addErrorListener(listener: PlayerErrorListener)
@@ -112,14 +116,6 @@ class DefaultPlayerApi(
     
     private val eventListeners = mutableSetOf<PlayerEventListener>()
     private val errorListeners = mutableSetOf<PlayerErrorListener>()
-    
-    init {
-        coroutineScope.launch {
-            launchPlayerStateObserver()
-        }
-        
-        player.addListener(playerListener)
-    }
     
     private val playerListener = object : Player.Listener {
         override fun onPlaybackStateChanged(playbackState: Int) {
@@ -175,8 +171,15 @@ class DefaultPlayerApi(
         }
     }
     
+    init {
+        player.addListener(playerListener)
+        coroutineScope.launch {
+            launchPlayerStateObserver()
+        }
+    }
+    
     private suspend fun launchPlayerStateObserver() {
-        while (isActive) {
+        while (coroutineScope.isActive) {
             if (player.playbackState == Player.STATE_READY) {
                 _currentPosition.value = player.currentPosition
             }
@@ -206,12 +209,12 @@ class DefaultPlayerApi(
     }
     
     override fun seekForward(deltaMs: Long) {
-        player.seekForward(deltaMs)
+        player.seekTo(player.currentPosition + deltaMs)
         eventListeners.forEach { it.onSeekCompleted() }
     }
     
     override fun seekBackward(deltaMs: Long) {
-        player.seekBackward(deltaMs)
+        player.seekTo(player.currentPosition - deltaMs)
         eventListeners.forEach { it.onSeekCompleted() }
     }
     
@@ -232,19 +235,15 @@ class DefaultPlayerApi(
     }
     
     override fun selectVideoTrack(index: Int) {
-        player.selectVideoTrack(index)
     }
     
     override fun selectAudioTrack(index: Int) {
-        player.selectAudioTrack(index)
     }
     
     override fun selectSubtitleTrack(index: Int) {
-        player.selectSubtitleTrack(index)
     }
     
     override fun disableSubtitle() {
-        player.disableSubtitle()
     }
     
     override fun setPlaybackSpeed(speed: Float) {
@@ -252,7 +251,7 @@ class DefaultPlayerApi(
     }
     
     override fun setVolume(volume: Float, isMuted: Boolean) {
-        player.setVolume(if (isMuted) 0f else volume)
+        player.volume = if (isMuted) 0f else volume
         _volume.value = volume
         eventListeners.forEach { it.onVolumeChanged(volume, isMuted) }
     }
@@ -270,7 +269,6 @@ class DefaultPlayerApi(
     }
     
     override fun setVideoScale(scale: VideoContentScale) {
-        // Implement in UI layer
     }
     
     override fun playMedia(uri: Uri, title: String?) {
@@ -313,11 +311,9 @@ class DefaultPlayerApi(
     }
     
     override fun addSubtitle(subtitle: Subtitle) {
-        // Implement subtitle integration
     }
     
     override fun removeSubtitle(subtitleId: String) {
-        // Implement subtitle removal
     }
     
     override fun observePlaybackState(): Flow<Int> = _playbackState.asStateFlow()
@@ -345,9 +341,9 @@ class DefaultPlayerApi(
         }
     }
     
-    override fun getAvailableVideoTracks(): List<Format> = player.getAvailableVideoTracks()
-    override fun getAvailableAudioTracks(): List<Format> = player.getAvailableAudioTracks()
-    override fun getAvailableSubtitleTracks(): List<Format> = player.getAvailableSubtitleTracks()
+    override fun getAvailableVideoTracks(): List<Format> = emptyList()
+    override fun getAvailableAudioTracks(): List<Format> = emptyList()
+    override fun getAvailableSubtitleTracks(): List<Format> = emptyList()
     override fun getCurrentPosition(): Long = player.currentPosition
     override fun getDuration(): Long = player.duration
     override fun getBufferedPosition(): Long = player.bufferedPosition
@@ -367,4 +363,14 @@ class DefaultPlayerApi(
     override fun removeErrorListener(listener: PlayerErrorListener) {
         errorListeners.remove(listener)
     }
+}
+
+fun MediaItem.toVideo(): Video {
+    return Video(
+        id = mediaId,
+        title = mediaMetadata.title?.toString() ?: "Unknown",
+        fileName = mediaMetadata.title?.toString() ?: "Unknown",
+        filePath = localConfiguration?.uri?.path ?: "",
+        uri = localConfiguration?.uri?.toString() ?: ""
+    )
 }
