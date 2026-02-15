@@ -3,6 +3,7 @@ package dev.gokanaz.kplayer.feature.player.ui.controls
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -43,6 +44,7 @@ import dev.gokanaz.kplayer.feature.player.state.MetadataState
 import dev.gokanaz.kplayer.feature.player.state.PlaybackParametersState
 import dev.gokanaz.kplayer.feature.player.state.TracksState
 import dev.gokanaz.kplayer.feature.player.extensions.formatDuration
+import dev.gokanaz.kplayer.feature.player.extensions.toIcon
 import dev.gokanaz.kplayer.feature.player.R
 
 @Composable

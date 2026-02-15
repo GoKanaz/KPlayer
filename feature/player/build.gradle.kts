@@ -1,6 +1,8 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("dagger.hilt.android.plugin")
+    id("kotlin-kapt")
 }
 
 android {
@@ -49,6 +51,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
     implementation("androidx.navigation:navigation-compose:2.7.7")
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 
     implementation("androidx.media3:media3-exoplayer:1.3.0")
     implementation("androidx.media3:media3-exoplayer-hls:1.3.0")
@@ -62,6 +65,9 @@ dependencies {
     implementation("com.google.accompanist:accompanist-permissions:0.34.0")
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.34.0")
     implementation("com.google.accompanist:accompanist-flowlayout:0.34.0")
+
+    implementation("com.google.dagger:hilt-android:2.48")
+    kapt("com.google.dagger:hilt-compiler:2.48")
 
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
