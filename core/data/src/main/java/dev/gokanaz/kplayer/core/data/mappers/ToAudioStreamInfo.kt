@@ -1,6 +1,6 @@
 package dev.gokanaz.kplayer.core.data.mappers
 
-import dev.gokanaz.kplayer.core.domain.AudioStreamInfo
+import dev.gokanaz.kplayer.core.model.media.AudioStreamInfo
 
 fun android.media.MediaMetadataRetriever.toAudioStreamInfo(): AudioStreamInfo? {
     val bitrate = this.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_BITRATE)?.toLongOrNull() ?: 0

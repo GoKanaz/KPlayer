@@ -4,12 +4,12 @@ import dev.gokanaz.kplayer.core.datastore.datasource.AppPreferencesDataSource
 import dev.gokanaz.kplayer.core.datastore.datasource.DarkMode
 import dev.gokanaz.kplayer.core.datastore.datasource.AppLanguage
 import dev.gokanaz.kplayer.core.datastore.datasource.ViewType
-import dev.gokanaz.kplayer.core.datastore.datasource.VideoQuality
+import dev.gokanaz.kplayer.core.model.media.VideoQuality
 import dev.gokanaz.kplayer.core.datastore.datasource.RepeatMode
 import dev.gokanaz.kplayer.core.datastore.datasource.PlaybackHistoryItem
 import dev.gokanaz.kplayer.core.datastore.datasource.PlayerPreferencesDataSource
-import dev.gokanaz.kplayer.core.domain.SortType
-import dev.gokanaz.kplayer.core.domain.SortOrder
+import dev.gokanaz.kplayer.core.model.SortType
+import dev.gokanaz.kplayer.core.model.SortOrder
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton

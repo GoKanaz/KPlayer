@@ -1,10 +1,10 @@
 package dev.gokanaz.kplayer.core.data.mappers
 
 import android.net.Uri
-import dev.gokanaz.kplayer.core.domain.Folder
-import dev.gokanaz.kplayer.core.domain.FolderNode
-import dev.gokanaz.kplayer.core.domain.FolderSortType
-import dev.gokanaz.kplayer.core.domain.Video
+import dev.gokanaz.kplayer.core.model.Folder
+import dev.gokanaz.kplayer.core.model.FolderNode
+import dev.gokanaz.kplayer.core.model.FolderSortType
+import dev.gokanaz.kplayer.core.model.Video
 
 fun List<Video>.toFolders(sortType: FolderSortType = FolderSortType.Name): List<Folder> {
     val folderMap = this.groupBy { it.bucketId }

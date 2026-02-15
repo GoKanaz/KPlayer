@@ -1,17 +1,17 @@
 package dev.gokanaz.kplayer.core.data.repository
 
-import dev.gokanaz.kplayer.core.domain.Folder
-import dev.gokanaz.kplayer.core.domain.FolderNode
-import dev.gokanaz.kplayer.core.domain.FolderSortType
-import dev.gokanaz.kplayer.core.domain.Playlist
-import dev.gokanaz.kplayer.core.domain.Result
-import dev.gokanaz.kplayer.core.domain.SortOrder
-import dev.gokanaz.kplayer.core.domain.SortType
-import dev.gokanaz.kplayer.core.domain.Video
-import dev.gokanaz.kplayer.core.domain.VideoFilter
-import dev.gokanaz.kplayer.core.domain.VideoStreamInfo
-import dev.gokanaz.kplayer.core.domain.AudioStreamInfo
-import dev.gokanaz.kplayer.core.domain.SubtitleStreamInfo
+import dev.gokanaz.kplayer.core.model.Folder
+import dev.gokanaz.kplayer.core.model.FolderNode
+import dev.gokanaz.kplayer.core.model.FolderSortType
+import dev.gokanaz.kplayer.core.model.Playlist
+import dev.gokanaz.kplayer.core.model.Result
+import dev.gokanaz.kplayer.core.model.SortOrder
+import dev.gokanaz.kplayer.core.model.SortType
+import dev.gokanaz.kplayer.core.model.Video
+import dev.gokanaz.kplayer.core.model.VideoFilter
+import dev.gokanaz.kplayer.core.model.VideoStreamInfo
+import dev.gokanaz.kplayer.core.model.media.AudioStreamInfo
+import dev.gokanaz.kplayer.core.model.media.SubtitleStreamInfo
 import kotlinx.coroutines.flow.Flow
 
 interface MediaRepository {

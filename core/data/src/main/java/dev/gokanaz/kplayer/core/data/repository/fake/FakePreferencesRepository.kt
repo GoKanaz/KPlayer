@@ -7,8 +7,8 @@ import dev.gokanaz.kplayer.core.datastore.datasource.ViewType
 import dev.gokanaz.kplayer.core.model.media.VideoQuality
 import dev.gokanaz.kplayer.core.datastore.datasource.RepeatMode
 import dev.gokanaz.kplayer.core.datastore.datasource.PlaybackHistoryItem
-import dev.gokanaz.kplayer.core.domain.SortType
-import dev.gokanaz.kplayer.core.domain.SortOrder
+import dev.gokanaz.kplayer.core.model.SortType
+import dev.gokanaz.kplayer.core.model.SortOrder
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update

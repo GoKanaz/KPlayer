@@ -1,7 +1,7 @@
 package dev.gokanaz.kplayer.core.data.mappers
 
-import dev.gokanaz.kplayer.core.domain.VideoQuality
-import dev.gokanaz.kplayer.core.domain.VideoStreamInfo
+import dev.gokanaz.kplayer.core.model.VideoQuality
+import dev.gokanaz.kplayer.core.model.VideoStreamInfo
 
 fun android.media.MediaMetadataRetriever.toVideoStreamInfo(): VideoStreamInfo? {
     val videoWidth = this.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)?.toIntOrNull() ?: return null

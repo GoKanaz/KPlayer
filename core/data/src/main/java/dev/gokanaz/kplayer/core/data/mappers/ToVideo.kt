@@ -2,8 +2,8 @@ package dev.gokanaz.kplayer.core.data.mappers
 
 import android.net.Uri
 import dev.gokanaz.kplayer.core.data.models.VideoState
-import dev.gokanaz.kplayer.core.domain.Video
-import dev.gokanaz.kplayer.core.domain.VideoQuality
+import dev.gokanaz.kplayer.core.model.Video
+import dev.gokanaz.kplayer.core.model.VideoQuality
 import dev.gokanaz.kplayer.core.media.model.MediaVideo
 
 fun MediaVideo.toVideo(state: VideoState? = null): Video {
