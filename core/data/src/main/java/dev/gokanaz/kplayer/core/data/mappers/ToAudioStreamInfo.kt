@@ -4,15 +4,13 @@ import dev.gokanaz.kplayer.core.model.media.AudioStreamInfo
 
 fun android.media.MediaMetadataRetriever.toAudioStreamInfo(): AudioStreamInfo? {
     val bitrate = this.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_BITRATE)?.toLongOrNull() ?: 0
-    val sampleRate = this.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_SAMPLERATE)?.toIntOrNull()
-    val codec = this.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_AUDIO_CODEC) ?: ""
-    val channelCount = this.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_NUM_TRACKS)?.toIntOrNull() ?: 2
-    
+    val sampleRate = this.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_SAMPLERATE)?.toIntOrNull() ?: 44100
+    val channels = this.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_NUM_TRACKS)?.toIntOrNull() ?: 2
+
     return AudioStreamInfo(
         bitrate = bitrate,
-        sampleRate = sampleRate ?: 44100,
-        codec = codec,
-        channelCount = channelCount,
+        sampleRate = sampleRate,
+        channels = channels,
         language = "und"
     )
 }

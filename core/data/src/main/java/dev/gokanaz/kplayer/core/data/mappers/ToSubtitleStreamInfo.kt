@@ -4,9 +4,8 @@ import dev.gokanaz.kplayer.core.model.media.SubtitleStreamInfo
 
 fun android.media.MediaMetadataRetriever.toSubtitleStreamInfo(index: Int): SubtitleStreamInfo? {
     return SubtitleStreamInfo(
-        index = index,
+        streamIndex = index,
         language = "und",
-        format = "unknown",
         isDefault = index == 0
     )
 }
