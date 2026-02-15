@@ -2,7 +2,6 @@ package dev.gokanaz.kplayer.feature.videopicker.state
 
 import android.content.Context
 import androidx.compose.runtime.Stable
-import androidx.lifecycle.viewModelScope
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
