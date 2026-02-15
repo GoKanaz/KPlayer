@@ -9,7 +9,7 @@ import dev.gokanaz.kplayer.core.model.SortOrder
 import dev.gokanaz.kplayer.core.model.SortType
 import dev.gokanaz.kplayer.core.model.Video
 import dev.gokanaz.kplayer.core.model.VideoFilter
-import dev.gokanaz.kplayer.core.model.VideoStreamInfo
+import dev.gokanaz.kplayer.core.model.media.VideoStreamInfo
 import dev.gokanaz.kplayer.core.model.media.AudioStreamInfo
 import dev.gokanaz.kplayer.core.model.media.SubtitleStreamInfo
 import kotlinx.coroutines.flow.Flow

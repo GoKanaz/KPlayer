@@ -7,8 +7,8 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
-import dev.gokanaz.kplayer.core.domain.SortOrder
-import dev.gokanaz.kplayer.core.domain.SortType
+import dev.gokanaz.kplayer.core.model.SortOrder
+import dev.gokanaz.kplayer.core.model.SortType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
@@ -195,13 +195,13 @@ class AppPreferencesDataSource @Inject constructor(
         return dataStore.data
             .catch { emit(androidx.datastore.preferences.core.emptyPreferences()) }
             .map { preferences ->
-                val value = preferences[SORT_VIDEO_TYPE] ?: SortType.Date::class.java.simpleName
+                val value = preferences[SORT_VIDEO_TYPE] ?: SortType.DATE::class.java.simpleName
                 when (value) {
-                    SortType.Name::class.java.simpleName -> SortType.Name
-                    SortType.Date::class.java.simpleName -> SortType.Date
-                    SortType.Size::class.java.simpleName -> SortType.Size
-                    SortType.Duration::class.java.simpleName -> SortType.Duration
-                    else -> SortType.Date
+                    SortType.NAME::class.java.simpleName -> SortType.NAME
+                    SortType.DATE::class.java.simpleName -> SortType.DATE
+                    SortType.SIZE::class.java.simpleName -> SortType.SIZE
+                    SortType.DURATION::class.java.simpleName -> SortType.DURATION
+                    else -> SortType.DATE
                 }
             }
     }
@@ -216,11 +216,11 @@ class AppPreferencesDataSource @Inject constructor(
         return dataStore.data
             .catch { emit(androidx.datastore.preferences.core.emptyPreferences()) }
             .map { preferences ->
-                val value = preferences[SORT_ORDER] ?: SortOrder.Descending::class.java.simpleName
+                val value = preferences[SORT_ORDER] ?: SortOrder.DESCENDING::class.java.simpleName
                 when (value) {
-                    SortOrder.Ascending::class.java.simpleName -> SortOrder.Ascending
-                    SortOrder.Descending::class.java.simpleName -> SortOrder.Descending
-                    else -> SortOrder.Descending
+                    SortOrder.ASCENDING::class.java.simpleName -> SortOrder.ASCENDING
+                    SortOrder.DESCENDING::class.java.simpleName -> SortOrder.DESCENDING
+                    else -> SortOrder.DESCENDING
                 }
             }
     }

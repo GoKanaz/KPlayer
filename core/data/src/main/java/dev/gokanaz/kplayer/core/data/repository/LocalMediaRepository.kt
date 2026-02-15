@@ -19,7 +19,7 @@ import dev.gokanaz.kplayer.core.model.SortOrder
 import dev.gokanaz.kplayer.core.model.SortType
 import dev.gokanaz.kplayer.core.model.Video
 import dev.gokanaz.kplayer.core.model.VideoFilter
-import dev.gokanaz.kplayer.core.model.VideoStreamInfo
+import dev.gokanaz.kplayer.core.model.media.VideoStreamInfo
 import dev.gokanaz.kplayer.core.model.media.AudioStreamInfo
 import dev.gokanaz.kplayer.core.model.media.SubtitleStreamInfo
 import dev.gokanaz.kplayer.core.media.service.MediaService
@@ -240,7 +240,6 @@ class LocalMediaRepository @Inject constructor(
                     videoCache[videoId] = video.copy(
                         isFavorite = favorite,
                         lastPlayedPosition = positionMs,
-                        lastPlayedAt = System.currentTimeMillis(),
                         watchCount = updatedState.watchCount
                     )
                 }
@@ -399,15 +398,15 @@ class LocalMediaRepository @Inject constructor(
     
     private fun applySorting(videos: List<Video>, sortType: SortType, sortOrder: SortOrder): List<Video> {
         val sorted = when (sortType) {
-            SortType.Name -> videos.sortedBy { it.title }
-            SortType.Date -> videos.sortedBy { it.dateAdded }
-            SortType.Size -> videos.sortedBy { it.size }
-            SortType.Duration -> videos.sortedBy { it.duration }
+            SortType.NAME -> videos.sortedBy { it.title }
+            SortType.DATE -> videos.sortedBy { it.dateAdded }
+            SortType.SIZE -> videos.sortedBy { it.size }
+            SortType.DURATION -> videos.sortedBy { it.duration }
         }
         
         return when (sortOrder) {
-            SortOrder.Ascending -> sorted
-            SortOrder.Descending -> sorted.reversed()
+            SortOrder.ASCENDING -> sorted
+            SortOrder.DESCENDING -> sorted.reversed()
         }
     }
     

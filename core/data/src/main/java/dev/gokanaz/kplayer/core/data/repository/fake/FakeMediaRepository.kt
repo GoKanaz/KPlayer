@@ -380,15 +380,15 @@ class FakeMediaRepository @Inject constructor() : MediaRepository {
     
     private fun applySorting(videos: List<Video>, sortType: SortType, sortOrder: SortOrder): List<Video> {
         val sorted = when (sortType) {
-            SortType.Name -> videos.sortedBy { it.title }
-            SortType.Date -> videos.sortedBy { it.dateAdded }
-            SortType.Size -> videos.sortedBy { it.size }
-            SortType.Duration -> videos.sortedBy { it.duration }
+            SortType.NAME -> videos.sortedBy { it.title }
+            SortType.DATE -> videos.sortedBy { it.dateAdded }
+            SortType.SIZE -> videos.sortedBy { it.size }
+            SortType.DURATION -> videos.sortedBy { it.duration }
         }
         
         return when (sortOrder) {
-            SortOrder.Ascending -> sorted
-            SortOrder.Descending -> sorted.reversed()
+            SortOrder.ASCENDING -> sorted
+            SortOrder.DESCENDING -> sorted.reversed()
         }
     }
 }
