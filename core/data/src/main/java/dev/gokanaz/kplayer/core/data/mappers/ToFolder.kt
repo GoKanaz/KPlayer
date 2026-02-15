@@ -2,12 +2,13 @@ package dev.gokanaz.kplayer.core.data.mappers
 
 import dev.gokanaz.kplayer.core.model.Folder
 import dev.gokanaz.kplayer.core.model.FolderNode
+import dev.gokanaz.kplayer.core.model.FolderSortType
 import dev.gokanaz.kplayer.core.model.Video
 
-fun List<Video>.toFolders(): List<Folder> {
+fun List<Video>.toFolders(sortType: FolderSortType = FolderSortType.NAME): List<Folder> {
     val folderMap = this.groupBy { it.bucketId }
 
-    return folderMap.map { (bucketId, videos) ->
+    val folders = folderMap.map { (bucketId, videos) ->
         Folder(
             id = bucketId,
             name = videos.firstOrNull()?.bucketDisplayName ?: "Unknown",
@@ -17,7 +18,14 @@ fun List<Video>.toFolders(): List<Folder> {
             totalDuration = videos.sumOf { it.duration },
             totalSize = videos.sumOf { it.size }
         )
-    }.sortedBy { it.name }
+    }
+
+    return when (sortType) {
+        FolderSortType.NAME -> folders.sortedBy { it.name }
+        FolderSortType.DATE -> folders.sortedByDescending { it.id }
+        FolderSortType.SIZE -> folders.sortedByDescending { it.totalSize }
+        FolderSortType.COUNT -> folders.sortedByDescending { it.mediaCount }
+    }
 }
 
 fun Map<String, List<Video>>.toFolderTree(): FolderNode {

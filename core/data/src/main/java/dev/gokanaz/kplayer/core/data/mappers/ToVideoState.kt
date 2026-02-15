@@ -18,3 +18,10 @@ fun Map.Entry<String, Long>.toVideoState(): VideoState {
         lastPlayedPositionMs = this.value
     )
 }
+
+fun Long.toVideoState(videoId: String): VideoState {
+    return VideoState(
+        videoId = videoId,
+        lastPlayedPositionMs = this
+    )
+}

@@ -61,7 +61,7 @@ class LocalMediaRepository @Inject constructor(
         try {
             val resumePositions = playerPreferences.observeResumePositions().first()
             val stateMap = resumePositions.mapKeys { it.key }
-                .mapValues { it.value.toVideoState() }
+                .mapValues { entry -> entry.value.toVideoState(entry.key) }
             
             val videosFlow = mediaService.getVideos()
                 .catch { e -> emit(Result.Error(e)) }
@@ -127,7 +127,7 @@ class LocalMediaRepository @Inject constructor(
             val mediaVideos = mediaService.search(query)
             val resumePositions = playerPreferences.observeResumePositions().first()
             val stateMap = resumePositions.mapKeys { it.key }
-                .mapValues { it.value.toVideoState() }
+                .mapValues { entry -> entry.value.toVideoState(entry.key) }
             
             val videos = mediaVideos.toVideos(stateMap)
             Result.Success(videos)
@@ -141,7 +141,7 @@ class LocalMediaRepository @Inject constructor(
             val mediaVideos = mediaService.getRecent(limit)
             val resumePositions = playerPreferences.observeResumePositions().first()
             val stateMap = resumePositions.mapKeys { it.key }
-                .mapValues { it.value.toVideoState() }
+                .mapValues { entry -> entry.value.toVideoState(entry.key) }
             
             val videos = mediaVideos.toVideos(stateMap)
             Result.Success(videos)
