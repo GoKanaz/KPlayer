@@ -24,7 +24,7 @@ fun List<Video>.toFolders(sortType: FolderSortType = FolderSortType.NAME): List<
         FolderSortType.NAME -> folders.sortedBy { it.name }
         FolderSortType.DATE -> folders.sortedByDescending { it.id }
         FolderSortType.SIZE -> folders.sortedByDescending { it.totalSize }
-        FolderSortType.COUNT -> folders.sortedByDescending { it.mediaCount }
+        FolderSortType.MEDIA_COUNT -> folders.sortedByDescending { it.mediaCount }
     }
 }
 
