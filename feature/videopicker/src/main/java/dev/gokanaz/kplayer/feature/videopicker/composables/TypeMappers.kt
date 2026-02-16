@@ -62,3 +62,10 @@ fun dev.gokanaz.kplayer.core.model.MediaLayoutMode.toDisplayMode(): DisplayMode 
         dev.gokanaz.kplayer.core.model.MediaLayoutMode.LIST -> DisplayMode.List
     }
 }
+
+fun dev.gokanaz.kplayer.core.model.MediaLayoutMode.toComposableLayoutMode(): MediaLayoutMode {
+    return when (this) {
+        dev.gokanaz.kplayer.core.model.MediaLayoutMode.GRID -> MediaLayoutMode.Grid
+        dev.gokanaz.kplayer.core.model.MediaLayoutMode.LIST -> MediaLayoutMode.List
+    }
+}
