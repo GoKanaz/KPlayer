@@ -406,7 +406,6 @@ private fun MediaPickerTopBar(
     } else {
         DefaultTopBar(
             title = title,
-            showBackButton = showBackButton,
             onSearchClick = onSearchToggle,
             onSortFilterClick = onSortFilterClick,
             onViewModeToggle = onViewModeToggle,
