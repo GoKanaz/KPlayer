@@ -402,6 +402,7 @@ class LocalMediaRepository @Inject constructor(
             SortType.DATE -> videos.sortedBy { it.dateAdded }
             SortType.SIZE -> videos.sortedBy { it.size }
             SortType.DURATION -> videos.sortedBy { it.duration }
+            SortType.RESOLUTION -> videos.sortedBy { it.width * it.height }
             SortType.TYPE -> videos.sortedBy { it.mimeType }
             SortType.ARTIST -> videos.sortedBy { it.bucketDisplayName }
             SortType.ALBUM -> videos.sortedBy { it.fileName }
