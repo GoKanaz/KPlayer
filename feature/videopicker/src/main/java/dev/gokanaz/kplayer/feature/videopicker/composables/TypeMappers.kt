@@ -55,3 +55,10 @@ fun FilterOptions.toViewModelType(): dev.gokanaz.kplayer.feature.videopicker.scr
         selectedFolders = this.selectedFolders
     )
 }
+
+fun dev.gokanaz.kplayer.core.model.MediaLayoutMode.toDisplayMode(): DisplayMode {
+    return when (this) {
+        dev.gokanaz.kplayer.core.model.MediaLayoutMode.GRID -> DisplayMode.Grid
+        dev.gokanaz.kplayer.core.model.MediaLayoutMode.LIST -> DisplayMode.List
+    }
+}

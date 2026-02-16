@@ -19,6 +19,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+internal fun SelectionModeTopBar(
 fun MediaView(
     viewModel: VideoPickerViewModel = viewModel(),
     onVideoClick: (String) -> Unit = {},
@@ -142,6 +143,7 @@ fun MediaView(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+internal fun SelectionModeTopBar(
 private fun MediaTopBar(
     title: String,
     isSelectionMode: Boolean,
@@ -188,7 +190,8 @@ private fun MediaTopBar(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun DefaultTopBar(
+internal fun SelectionModeTopBar(
+internal fun DefaultTopBar(
     title: String,
     onSearchClick: () -> Unit,
     onSortFilterClick: () -> Unit,
@@ -241,7 +244,8 @@ private fun DefaultTopBar(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SearchTopBar(
+internal fun SelectionModeTopBar(
+internal fun SearchTopBar(
     query: String,
     onQueryChange: (String) -> Unit,
     onClose: () -> Unit
@@ -280,7 +284,8 @@ private fun SearchTopBar(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SelectionModeTopBar(
+internal fun SelectionModeTopBar(
+
     selectedCount: Int,
     onClearSelection: () -> Unit,
     onDelete: () -> Unit,
@@ -331,6 +336,7 @@ private fun SelectionModeTopBar(
 }
 
 @Composable
+internal fun SelectionModeTopBar(
 private fun MediaBottomBar(
     viewMode: ViewMode,
     onViewModeChange: (ViewMode) -> Unit,

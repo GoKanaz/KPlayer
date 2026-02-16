@@ -65,7 +65,7 @@ sealed class MediaItem {
     ) : MediaItem() {
         override val id: String = folder.id
         override val title: String = folder.name
-        override val thumbnail: Any? = folder.thumbnails.firstOrNull()
+        override val thumbnail: Any? = folder.thumbnailUris.firstOrNull()
     }
 }
 

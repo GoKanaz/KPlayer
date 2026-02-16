@@ -33,6 +33,7 @@ import dev.gokanaz.kplayer.feature.videopicker.composables.toComposableType
 import dev.gokanaz.kplayer.feature.videopicker.composables.toSortType
 import dev.gokanaz.kplayer.feature.videopicker.composables.toCoreType
 import dev.gokanaz.kplayer.feature.videopicker.composables.toViewModelType
+import dev.gokanaz.kplayer.feature.videopicker.composables.toDisplayMode
 import dev.gokanaz.kplayer.feature.videopicker.extensions.*
 import dev.gokanaz.kplayer.feature.videopicker.screens.MediaItem
 import kotlinx.coroutines.launch
@@ -410,7 +411,7 @@ private fun MediaPickerTopBar(
             onSortFilterClick = onSortFilterClick,
             onViewModeToggle = onViewModeToggle,
             onNavigateBack = onNavigationClick,
-            currentLayoutMode = currentLayoutMode
+            currentDisplayMode = currentLayoutMode.toDisplayMode()
         )
     }
 }
