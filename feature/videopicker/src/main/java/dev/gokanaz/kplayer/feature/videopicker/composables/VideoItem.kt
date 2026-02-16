@@ -4,6 +4,8 @@ import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,92 +15,26 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
-import dev.gokanaz.kplayer.core.model.MediaLayoutMode
 import dev.gokanaz.kplayer.core.model.Video
+import dev.gokanaz.kplayer.feature.videopicker.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-
-enum class ContextMenuItem {
-    Play, Delete, Share, Info, Rename, AddToPlaylist, ShowInFolder
-}
-
-@Composable
-private fun VideoContextMenu(
-    video: Video,
-    onDismiss: () -> Unit,
-    onItemClick: (ContextMenuItem) -> Unit
-) {
-    DropdownMenu(
-        expanded = true,
-        onDismissRequest = onDismiss
-    ) {
-        DropdownMenuItem(
-            text = { Text("Play") },
-            onClick = { onItemClick(ContextMenuItem.Play) },
-            leadingIcon = { Icon(Icons.Default.PlayArrow, null) }
-        )
-        DropdownMenuItem(
-            text = { Text("Info") },
-            onClick = { onItemClick(ContextMenuItem.Info) },
-            leadingIcon = { Icon(Icons.Default.Info, null) }
-        )
-        DropdownMenuItem(
-            text = { Text("Share") },
-            onClick = { onItemClick(ContextMenuItem.Share) },
-            leadingIcon = { Icon(Icons.Default.Share, null) }
-        )
-        DropdownMenuItem(
-            text = { Text("Rename") },
-            onClick = { onItemClick(ContextMenuItem.Rename) },
-            leadingIcon = { Icon(Icons.Default.Edit, null) }
-        )
-        DropdownMenuItem(
-            text = { Text("Add to playlist") },
-            onClick = { onItemClick(ContextMenuItem.AddToPlaylist) },
-            leadingIcon = { Icon(Icons.Default.PlaylistAdd, null) }
-        )
-        DropdownMenuItem(
-            text = { Text("Show in folder") },
-            onClick = { onItemClick(ContextMenuItem.ShowInFolder) },
-            leadingIcon = { Icon(Icons.Default.FolderOpen, null) }
-        )
-        DropdownMenuItem(
-            text = { Text("Delete") },
-            onClick = { onItemClick(ContextMenuItem.Delete) },
-            leadingIcon = { Icon(Icons.Default.Delete, null) }
-        )
-    }
-}
-
-@Composable
-private fun ShimmerEffect(modifier: Modifier = Modifier) {
-    val transition = rememberInfiniteTransition(label = "shimmer")
-    val alpha by transition.animateFloat(
-        initialValue = 0.3f,
-        targetValue = 0.7f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(800),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "shimmer_alpha"
-    )
-    Box(
-        modifier = modifier.background(
-            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = alpha)
-        )
-    )
-}
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
 @Composable
@@ -113,6 +49,11 @@ fun VideoItem(
     onFavoriteClick: () -> Unit = {},
     onContextMenuItemClick: (ContextMenuItem) -> Unit = {}
 ) {
+    val configuration = LocalConfiguration.current
+    val isLandscape = configuration.orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE
+    val scope = rememberCoroutineScope()
+    var showContextMenu by remember { mutableStateOf(false) }
+    
     when (layoutMode) {
         MediaLayoutMode.GRID -> {
             GridVideoItem(
@@ -126,9 +67,11 @@ fun VideoItem(
                 onContextMenuItemClick = onContextMenuItemClick,
                 modifier = Modifier
                     .fillMaxWidth()
+                    .aspectRatio(if (isLandscape) 1.2f else 0.8f)
                     .animateContentSize()
             )
         }
+        
         MediaLayoutMode.LIST -> {
             ListVideoItem(
                 video = video,
@@ -162,14 +105,13 @@ private fun GridVideoItem(
 ) {
     var showShimmer by remember { mutableStateOf(true) }
     var imageLoadError by remember { mutableStateOf(false) }
-    var showContextMenu by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
-
+    
     LaunchedEffect(video.thumbnail) {
         showShimmer = true
         imageLoadError = false
     }
-
+    
     Card(
         modifier = modifier
             .padding(4.dp)
@@ -186,141 +128,176 @@ private fun GridVideoItem(
         )
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(0.8f)
+            modifier = Modifier.fillMaxSize()
         ) {
-            SubcomposeAsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(video.thumbnail)
-                    .crossfade(true)
-                    .build(),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize(),
-                loading = {
-                    if (showShimmer) {
-                        ShimmerEffect(modifier = Modifier.fillMaxSize())
-                    } else {
+            // Thumbnail container
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            ) {
+                SubcomposeAsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(video.thumbnail)
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize(),
+                    loading = {
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .background(MaterialTheme.colorScheme.surfaceVariant),
+                                .background(MaterialTheme.colorScheme.surfaceVariant)
+                        ) {
+                            if (showShimmer) {
+                                ShimmerEffect(modifier = Modifier.fillMaxSize())
+                            } else {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .background(MaterialTheme.colorScheme.surfaceVariant),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.VideoFile,
+                                        contentDescription = null,
+                                        modifier = Modifier.size(32.dp),
+                                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                                    )
+                                }
+                            }
+                        }
+                    },
+                    error = {
+                        imageLoadError = true
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(MaterialTheme.colorScheme.errorContainer),
                             contentAlignment = Alignment.Center
                         ) {
-                            Icon(
-                                imageVector = Icons.Default.VideoFile,
-                                contentDescription = null,
-                                modifier = Modifier.size(32.dp),
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
-                            )
+                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                Icon(
+                                    imageVector = Icons.Default.BrokenImage,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(32.dp),
+                                    tint = MaterialTheme.colorScheme.error
+                                )
+                                Text(
+                                    text = "Failed to load",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.error
+                                )
+                            }
+                        }
+                    },
+                    onSuccess = {
+                        scope.launch {
+                            delay(300)
+                            showShimmer = false
                         }
                     }
-                },
-                error = {
-                    imageLoadError = true
+                )
+                
+                if (!imageLoadError && !showShimmer) {
+                    // Gradient overlay for better text visibility
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .background(MaterialTheme.colorScheme.errorContainer),
+                            .background(
+                                brush = Brush.verticalGradient(
+                                    colors = listOf(
+                                        Color.Transparent,
+                                        Color.Black.copy(alpha = 0.7f)
+                                    ),
+                                    startY = 0.7f
+                                )
+                            )
+                    )
+                }
+                
+                // Play icon overlay on hover/focused
+                var isHovered by remember { mutableStateOf(false) }
+                if (isHovered && !isSelectionMode) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(Color.Black.copy(alpha = 0.3f)),
                         contentAlignment = Alignment.Center
                     ) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Icon(
-                                imageVector = Icons.Default.BrokenImage,
-                                contentDescription = null,
-                                modifier = Modifier.size(32.dp),
-                                tint = MaterialTheme.colorScheme.error
-                            )
+                        Icon(
+                            imageVector = Icons.Default.PlayArrow,
+                            contentDescription = "Play",
+                            modifier = Modifier.size(48.dp),
+                            tint = Color.White
+                        )
+                    }
+                }
+                
+                // Duration badge
+                Surface(
+                    modifier = Modifier
+                        .align(Alignment.BottomStart)
+                        .padding(8.dp),
+                    shape = RoundedCornerShape(4.dp),
+                    color = Color.Black.copy(alpha = 0.7f)
+                ) {
+                    Text(
+                        text = formatDuration(video.duration),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = Color.White,
+                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                    )
+                }
+                
+                // Resolution chip
+                if (video.width >= 1920 || video.height >= 1080) {
+                    val resolutionText = when {
+                        video.width >= 3840 || video.height >= 2160 -> "4K"
+                        video.width >= 1920 || video.height >= 1080 -> "1080p"
+                        video.width >= 1280 || video.height >= 720 -> "720p"
+                        else -> ""
+                    }
+                    
+                    if (resolutionText.isNotBlank()) {
+                        Surface(
+                            modifier = Modifier
+                                .align(Alignment.BottomEnd)
+                                .padding(8.dp),
+                            shape = RoundedCornerShape(4.dp),
+                            color = MaterialTheme.colorScheme.primary
+                        ) {
                             Text(
-                                text = "Failed to load",
+                                text = resolutionText,
                                 style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.error
+                                color = MaterialTheme.colorScheme.onPrimary,
+                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                             )
                         }
                     }
-                },
-                onSuccess = {
-                    scope.launch {
-                        delay(300)
-                        showShimmer = false
-                    }
                 }
-            )
-
-            if (!imageLoadError && !showShimmer) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(
-                            brush = Brush.verticalGradient(
-                                colors = listOf(
-                                    Color.Transparent,
-                                    Color.Black.copy(alpha = 0.7f)
-                                ),
-                                startY = 0.7f
-                            )
-                        )
-                )
-            }
-
-            Surface(
-                modifier = Modifier
-                    .align(Alignment.BottomStart)
-                    .padding(8.dp),
-                shape = RoundedCornerShape(4.dp),
-                color = Color.Black.copy(alpha = 0.7f)
-            ) {
-                Text(
-                    text = formatDuration(video.duration),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = Color.White,
-                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
-                )
-            }
-
-            if (video.width >= 1920 || video.height >= 1080) {
-                val resolutionText = when {
-                    video.width >= 3840 || video.height >= 2160 -> "4K"
-                    video.width >= 1920 || video.height >= 1080 -> "1080p"
-                    video.width >= 1280 || video.height >= 720 -> "720p"
-                    else -> ""
-                }
-                if (resolutionText.isNotBlank()) {
-                    Surface(
+                
+                // Favorite icon
+                if (isFavorite) {
+                    Icon(
+                        imageVector = Icons.Default.Favorite,
+                        contentDescription = "Favorite",
                         modifier = Modifier
-                            .align(Alignment.BottomEnd)
-                            .padding(8.dp),
-                        shape = RoundedCornerShape(4.dp),
-                        color = MaterialTheme.colorScheme.primary
-                    ) {
-                        Text(
-                            text = resolutionText,
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
-                        )
-                    }
+                            .align(Alignment.TopEnd)
+                            .padding(8.dp)
+                            .size(20.dp),
+                        tint = Color.Red
+                    )
                 }
             }
-
-            if (isFavorite) {
-                Icon(
-                    imageVector = Icons.Default.Favorite,
-                    contentDescription = "Favorite",
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(8.dp)
-                        .size(20.dp),
-                    tint = Color.Red
-                )
-            }
-
+            
+            // Title and metadata
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(8.dp)
                     .align(Alignment.BottomStart)
-                    .padding(horizontal = 8.dp, vertical = 4.dp)
             ) {
                 Text(
                     text = video.title,
@@ -330,29 +307,41 @@ private fun GridVideoItem(
                     overflow = TextOverflow.Ellipsis,
                     color = if (imageLoadError || showShimmer) Color.Transparent else Color.White
                 )
-
+                
                 Spacer(modifier = Modifier.height(2.dp))
-
+                
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(4.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    InfoChip(text = formatFileSize(video.size), size = ChipSize.Small)
+                    InfoChip(
+                        text = formatFileSize(video.size),
+                        size = ChipSize.Small
+                    )
+                    
                     if (video.width > 0 && video.height > 0) {
-                        InfoChip(text = "${video.height}p", size = ChipSize.Small)
+                        InfoChip(
+                            text = "${video.height}p",
+                            size = ChipSize.Small
+                        )
                     }
                 }
             }
-
+            
+            // Selection overlay
             if (isSelectionMode) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(
-                            if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
-                            else Color.Black.copy(alpha = 0.1f)
+                            if (isSelected) {
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
+                            } else {
+                                Color.Black.copy(alpha = 0.1f)
+                            }
                         )
                 )
+                
                 Checkbox(
                     checked = isSelected,
                     onCheckedChange = null,
@@ -362,7 +351,8 @@ private fun GridVideoItem(
                         .size(24.dp)
                 )
             }
-
+            
+            // Menu button
             IconButton(
                 onClick = { showContextMenu = true },
                 modifier = Modifier
@@ -379,7 +369,7 @@ private fun GridVideoItem(
             }
         }
     }
-
+    
     if (showContextMenu) {
         VideoContextMenu(
             video = video,
@@ -406,7 +396,7 @@ private fun ListVideoItem(
     modifier: Modifier = Modifier
 ) {
     var showContextMenu by remember { mutableStateOf(false) }
-
+    
     Card(
         modifier = modifier
             .padding(horizontal = 8.dp, vertical = 4.dp)
@@ -434,7 +424,8 @@ private fun ListVideoItem(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
             }
-
+            
+            // Thumbnail
             Box(
                 modifier = Modifier
                     .size(56.dp)
@@ -449,23 +440,10 @@ private fun ListVideoItem(
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize(),
-                    error = {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .background(MaterialTheme.colorScheme.surfaceVariant),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.VideoFile,
-                                contentDescription = null,
-                                modifier = Modifier.size(24.dp),
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                    }
+                    error = painterResource(id = R.drawable.ic_video_placeholder)
                 )
-
+                
+                // Duration badge
                 Surface(
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
@@ -480,7 +458,8 @@ private fun ListVideoItem(
                         modifier = Modifier.padding(horizontal = 2.dp, vertical = 1.dp)
                     )
                 }
-
+                
+                // Favorite icon
                 if (isFavorite) {
                     Icon(
                         imageVector = Icons.Default.Favorite,
@@ -493,10 +472,13 @@ private fun ListVideoItem(
                     )
                 }
             }
-
+            
             Spacer(modifier = Modifier.width(12.dp))
-
-            Column(modifier = Modifier.weight(1f)) {
+            
+            // Video info
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
                 Text(
                     text = video.title,
                     style = MaterialTheme.typography.titleMedium,
@@ -504,9 +486,9 @@ private fun ListVideoItem(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
-
+                
                 Spacer(modifier = Modifier.height(2.dp))
-
+                
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalAlignment = Alignment.CenterVertically
@@ -516,11 +498,13 @@ private fun ListVideoItem(
                         size = ChipSize.Small,
                         type = ChipType.Duration
                     )
+                    
                     InfoChip(
                         text = formatFileSize(video.size),
                         size = ChipSize.Small,
                         type = ChipType.FileSize
                     )
+                    
                     if (video.width > 0 && video.height > 0) {
                         InfoChip(
                             text = "${video.height}p",
@@ -529,31 +513,27 @@ private fun ListVideoItem(
                         )
                     }
                 }
-
+                
                 Spacer(modifier = Modifier.height(2.dp))
-
+                
                 Text(
-                    text = video.filePath,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    text = formatDate(video.dateAdded),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-
+            
             IconButton(
-                onClick = { showContextMenu = true },
-                modifier = Modifier.size(32.dp)
+                onClick = { showContextMenu = true }
             ) {
                 Icon(
                     imageVector = Icons.Default.MoreVert,
-                    contentDescription = "More options",
-                    modifier = Modifier.size(18.dp)
+                    contentDescription = "More options"
                 )
             }
         }
     }
-
+    
     if (showContextMenu) {
         VideoContextMenu(
             video = video,
@@ -566,12 +546,145 @@ private fun ListVideoItem(
     }
 }
 
+@Composable
+private fun VideoContextMenu(
+    video: Video,
+    onDismiss: () -> Unit,
+    onItemClick: (ContextMenuItem) -> Unit
+) {
+    DropdownMenu(
+        expanded = true,
+        onDismissRequest = onDismiss
+    ) {
+        listOf(
+            ContextMenuItem.Play,
+            ContextMenuItem.AddToPlaylist,
+            ContextMenuItem.Share,
+            ContextMenuItem.Rename,
+            ContextMenuItem.Delete,
+            ContextMenuItem.Info
+        ).forEach { item ->
+            DropdownMenuItem(
+                text = { Text(item.displayName) },
+                onClick = { onItemClick(item) },
+                leadingIcon = {
+                    Icon(
+                        imageVector = item.icon,
+                        contentDescription = null
+                    )
+                }
+            )
+        }
+    }
+}
+
+@Composable
+private fun ShimmerEffect(modifier: Modifier = Modifier) {
+    val transition = rememberInfiniteTransition()
+    val translateX by transition.animateFloat(
+        initialValue = -1000f,
+        targetValue = 1000f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 1000, easing = FastOutLinearInEasing)
+        ),
+        label = "shimmer"
+    )
+    
+    Box(
+        modifier = modifier.background(
+            brush = Brush.linearGradient(
+                colors = listOf(
+                    MaterialTheme.colorScheme.surfaceVariant,
+                    MaterialTheme.colorScheme.surface,
+                    MaterialTheme.colorScheme.surfaceVariant
+                ),
+                start = Offset(translateX, 0f),
+                end = Offset(translateX + 500f, 500f)
+            )
+        )
+    )
+}
+
+@Composable
+fun VideoItemPlaceholder(layoutMode: MediaLayoutMode) {
+    when (layoutMode) {
+        MediaLayoutMode.GRID -> {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(0.8f)
+                    .padding(4.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                ) {
+                    ShimmerEffect(modifier = Modifier.fillMaxSize())
+                }
+            }
+        }
+        
+        MediaLayoutMode.LIST -> {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp, vertical = 4.dp)
+                    .height(80.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(12.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(56.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(MaterialTheme.colorScheme.surfaceVariant)
+                    ) {
+                        ShimmerEffect(modifier = Modifier.fillMaxSize())
+                    }
+                    
+                    Spacer(modifier = Modifier.width(12.dp))
+                    
+                    Column(
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth(0.7f)
+                                .height(16.dp)
+                                .clip(RoundedCornerShape(4.dp))
+                                .background(MaterialTheme.colorScheme.surfaceVariant)
+                        )
+                        
+                        Spacer(modifier = Modifier.height(8.dp))
+                        
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth(0.5f)
+                                .height(12.dp)
+                                .clip(RoundedCornerShape(4.dp))
+                                .background(MaterialTheme.colorScheme.surfaceVariant)
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
 private fun formatDuration(seconds: Long): String {
     val hours = seconds / 3600
     val minutes = (seconds % 3600) / 60
     val secs = seconds % 60
-    return if (hours > 0) String.format("%d:%02d:%02d", hours, minutes, secs)
-    else String.format("%02d:%02d", minutes, secs)
+    
+    return if (hours > 0) {
+        String.format("%d:%02d:%02d", hours, minutes, secs)
+    } else {
+        String.format("%02d:%02d", minutes, secs)
+    }
 }
 
 private fun formatDurationShort(seconds: Long): String {
@@ -584,10 +697,22 @@ private fun formatFileSize(bytes: Long): String {
     val kb = bytes / 1024.0
     val mb = kb / 1024.0
     val gb = mb / 1024.0
+    
     return when {
-        gb >= 1 -> String.format("%.1fGB", gb)
-        mb >= 1 -> String.format("%.1fMB", mb)
-        kb >= 1 -> String.format("%.0fKB", kb)
-        else -> "${bytes}B"
+        gb >= 1 -> String.format("%.1f GB", gb)
+        mb >= 1 -> String.format("%.1f MB", mb)
+        kb >= 1 -> String.format("%.0f KB", kb)
+        else -> "$bytes B"
     }
+}
+
+private fun formatDate(timestamp: Long): String {
+    val date = java.util.Date(timestamp)
+    val format = java.text.SimpleDateFormat("MMM dd, yyyy", java.util.Locale.getDefault())
+    return format.format(date)
+}
+
+enum class MediaLayoutMode {
+    GRID,
+    LIST
 }

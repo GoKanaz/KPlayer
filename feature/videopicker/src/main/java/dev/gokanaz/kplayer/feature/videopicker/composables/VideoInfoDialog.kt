@@ -1,8 +1,8 @@
 package dev.gokanaz.kplayer.feature.videopicker.composables
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -12,7 +12,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
@@ -40,9 +40,11 @@ fun VideoInfoDialog(
     val scrollState = rememberScrollState()
     val clipboardManager = LocalClipboardManager.current
     var expandedSections by remember { mutableStateOf(setOf("basic", "technical")) }
-
+    
     AlertDialog(
-        onDismissRequest = onDismiss
+        onDismissRequest = onDismiss,
+        containerColor = Color.Transparent,
+        contentColor = MaterialTheme.colorScheme.onSurface
     ) {
         Card(
             modifier = Modifier
@@ -55,6 +57,7 @@ fun VideoInfoDialog(
                     .fillMaxWidth()
                     .verticalScroll(scrollState)
             ) {
+                // Header with thumbnail
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -69,7 +72,8 @@ fun VideoInfoDialog(
                         contentScale = ContentScale.Crop,
                         modifier = Modifier.fillMaxSize()
                     )
-
+                    
+                    // Gradient overlay
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
@@ -82,7 +86,8 @@ fun VideoInfoDialog(
                                 )
                             )
                     )
-
+                    
+                    // Title overlay
                     Column(
                         modifier = Modifier
                             .align(Alignment.BottomStart)
@@ -94,7 +99,7 @@ fun VideoInfoDialog(
                             color = Color.White,
                             fontWeight = FontWeight.Bold
                         )
-
+                        
                         Text(
                             text = videoInfo.filename,
                             style = MaterialTheme.typography.bodyMedium,
@@ -102,7 +107,8 @@ fun VideoInfoDialog(
                         )
                     }
                 }
-
+                
+                // Action buttons
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -114,38 +120,40 @@ fun VideoInfoDialog(
                         text = "Play",
                         onClick = onPlay
                     )
-
+                    
                     ActionButton(
                         icon = Icons.Default.Share,
                         text = "Share",
                         onClick = onShare
                     )
-
+                    
                     ActionButton(
                         icon = Icons.Default.Delete,
                         text = "Delete",
                         onClick = onDelete
                     )
-
+                    
                     ActionButton(
                         icon = Icons.Default.Edit,
                         text = "Rename",
                         onClick = onRename
                     )
-
+                    
                     ActionButton(
                         icon = Icons.Default.PlaylistAdd,
                         text = "Playlist",
                         onClick = onAddToPlaylist
                     )
                 }
-
+                
                 Divider()
-
+                
+                // Info sections
                 Column(
                     modifier = Modifier.padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
+                    // Basic information
                     ExpandableSection(
                         title = "Basic Information",
                         icon = Icons.Default.Info,
@@ -165,7 +173,7 @@ fun VideoInfoDialog(
                         ) {
                             clipboardManager.setText(AnnotatedString(formatDuration(videoInfo.duration)))
                         }
-
+                        
                         InfoRow(
                             label = "File size",
                             value = formatFileSize(videoInfo.fileSize),
@@ -173,7 +181,7 @@ fun VideoInfoDialog(
                         ) {
                             clipboardManager.setText(AnnotatedString(videoInfo.fileSize.toString()))
                         }
-
+                        
                         InfoRow(
                             label = "Path",
                             value = videoInfo.path,
@@ -181,20 +189,21 @@ fun VideoInfoDialog(
                         ) {
                             clipboardManager.setText(AnnotatedString(videoInfo.path))
                         }
-
+                        
                         InfoRow(
                             label = "Added",
                             value = formatDate(videoInfo.dateAdded),
                             icon = Icons.Default.DateRange
                         )
-
+                        
                         InfoRow(
                             label = "Modified",
                             value = formatDate(videoInfo.dateModified),
                             icon = Icons.Default.Update
                         )
                     }
-
+                    
+                    // Technical details
                     ExpandableSection(
                         title = "Technical Details",
                         icon = Icons.Default.Settings,
@@ -212,38 +221,39 @@ fun VideoInfoDialog(
                             value = "${videoInfo.width}x${videoInfo.height}",
                             icon = Icons.Default.HighQuality
                         )
-
+                        
                         InfoRow(
                             label = "Frame rate",
                             value = "${videoInfo.frameRate} fps",
                             icon = Icons.Default.SlowMotionVideo
                         )
-
+                        
                         InfoRow(
                             label = "Bitrate",
                             value = formatBitrate(videoInfo.bitrate),
                             icon = Icons.Default.Speed
                         )
-
+                        
                         InfoRow(
                             label = "Video codec",
                             value = videoInfo.videoCodec,
                             icon = Icons.Default.Code
                         )
-
+                        
                         InfoRow(
                             label = "Audio codec",
                             value = videoInfo.audioCodec,
                             icon = Icons.Default.Audiotrack
                         )
-
+                        
                         InfoRow(
                             label = "Audio channels",
                             value = formatAudioChannels(videoInfo.audioChannels),
                             icon = Icons.Default.SurroundSound
                         )
                     }
-
+                    
+                    // Subtitles
                     if (videoInfo.subtitles.isNotEmpty()) {
                         ExpandableSection(
                             title = "Subtitles (${videoInfo.subtitles.size})",
@@ -267,7 +277,8 @@ fun VideoInfoDialog(
                         }
                     }
                 }
-
+                
+                // Footer actions
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -286,9 +297,9 @@ fun VideoInfoDialog(
                         Spacer(modifier = Modifier.width(8.dp))
                         Text("Show in folder")
                     }
-
+                    
                     Spacer(modifier = Modifier.width(8.dp))
-
+                    
                     Button(
                         onClick = onDismiss,
                         modifier = Modifier.weight(1f)
@@ -317,7 +328,7 @@ private fun ActionButton(
             modifier = Modifier.size(24.dp),
             tint = MaterialTheme.colorScheme.primary
         )
-
+        
         Text(
             text = text,
             style = MaterialTheme.typography.labelSmall,
@@ -350,23 +361,23 @@ private fun ExpandableSection(
                 modifier = Modifier.size(20.dp),
                 tint = MaterialTheme.colorScheme.primary
             )
-
+            
             Spacer(modifier = Modifier.width(8.dp))
-
+            
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.weight(1f)
             )
-
+            
             Icon(
                 imageVector = if (isExpanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
                 contentDescription = if (isExpanded) "Collapse" else "Expand",
                 modifier = Modifier.size(20.dp)
             )
         }
-
+        
         if (isExpanded) {
             Column(
                 modifier = Modifier
@@ -398,37 +409,37 @@ private fun InfoRow(
             modifier = Modifier.size(16.dp),
             tint = MaterialTheme.colorScheme.onSurfaceVariant
         )
-
+        
         Spacer(modifier = Modifier.width(8.dp))
-
+        
         Text(
             text = label,
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.width(100.dp)
         )
-
+        
         Text(
             text = ":",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
-
+        
         Spacer(modifier = Modifier.width(8.dp))
-
+        
         Text(
             text = value,
             style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.weight(1f)
         )
-
+        
         if (onCopy != null) {
             IconButton(
                 onClick = onCopy,
                 modifier = Modifier.size(24.dp)
             ) {
                 Icon(
-                    imageVector = Icons.Default.ContentCopy,
+                    imageVector = Icons.Default.Copy,
                     contentDescription = "Copy",
                     modifier = Modifier.size(16.dp)
                 )
@@ -467,7 +478,7 @@ private fun formatDuration(seconds: Long): String {
     val hours = seconds / 3600
     val minutes = (seconds % 3600) / 60
     val secs = seconds % 60
-
+    
     return if (hours > 0) {
         String.format("%d:%02d:%02d", hours, minutes, secs)
     } else {
@@ -479,7 +490,7 @@ private fun formatFileSize(bytes: Long): String {
     val kb = bytes / 1024.0
     val mb = kb / 1024.0
     val gb = mb / 1024.0
-
+    
     return when {
         gb >= 1 -> String.format("%.2f GB", gb)
         mb >= 1 -> String.format("%.2f MB", mb)

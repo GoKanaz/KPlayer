@@ -34,12 +34,11 @@ import dev.gokanaz.kplayer.feature.videopicker.composables.toSortType
 import dev.gokanaz.kplayer.feature.videopicker.composables.toCoreType
 import dev.gokanaz.kplayer.feature.videopicker.composables.toViewModelType
 import dev.gokanaz.kplayer.feature.videopicker.composables.toDisplayMode
-import dev.gokanaz.kplayer.feature.videopicker.composables.toComposableLayoutMode
 import dev.gokanaz.kplayer.feature.videopicker.extensions.*
-import kotlinx.coroutines.launch
 import dev.gokanaz.kplayer.feature.videopicker.screens.MediaItem
 import dev.gokanaz.kplayer.feature.videopicker.screens.MediaState
 
+import android.content.Context
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -205,7 +204,7 @@ fun MediaPickerScreen(
                                         is MediaItem.VideoItem -> {
                                             VideoItem(
                                                 video = item.video,
-                                                layoutMode = layoutMode.toComposableLayoutMode(),
+                                                layoutMode = layoutMode,
                                                 isSelected = selectionManager.isSelected(item.id),
                                                 isSelectionMode = isSelectionMode,
                                                 isFavorite = item.video.isFavorite,
@@ -268,7 +267,7 @@ fun MediaPickerScreen(
                                         is MediaItem.VideoItem -> {
                                             VideoItem(
                                                 video = item.video,
-                                                layoutMode = layoutMode.toComposableLayoutMode(),
+                                                layoutMode = layoutMode,
                                                 isSelected = selectionManager.isSelected(item.id),
                                                 isSelectionMode = isSelectionMode,
                                                 isFavorite = item.video.isFavorite,
@@ -325,7 +324,7 @@ fun MediaPickerScreen(
                 QuickSettingDialog(
                     currentSort = sortOption.toSortOption(),
                     currentSortOrder = sortOrder.toComposableType(),
-                    currentFilters = filterOptions.toComposableType(),
+                    currentFilters = filterOptions,
                     onDismiss = { showSortFilter = false },
                     onApply = { sort, order, filters ->
                         viewModel.updateSort(sort.toSortType(), order.toCoreType())
