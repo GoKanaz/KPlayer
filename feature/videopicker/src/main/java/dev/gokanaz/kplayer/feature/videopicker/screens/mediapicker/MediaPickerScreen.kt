@@ -36,7 +36,7 @@ import dev.gokanaz.kplayer.feature.videopicker.composables.toViewModelType
 import dev.gokanaz.kplayer.feature.videopicker.composables.toDisplayMode
 import dev.gokanaz.kplayer.feature.videopicker.extensions.*
 import dev.gokanaz.kplayer.feature.videopicker.screens.MediaItem
-import kotlinx.coroutines.launch
+import dev.gokanaz.kplayer.feature.videopicker.screens.MediaState
 
 import android.content.Context
 
