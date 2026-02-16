@@ -2,6 +2,7 @@ package dev.gokanaz.kplayer.feature.videopicker.composables
 
 import dev.gokanaz.kplayer.core.model.SortType
 import dev.gokanaz.kplayer.core.model.SortOrder as CoreSortOrder
+import dev.gokanaz.kplayer.core.model.MediaLayoutMode as CoreMediaLayoutMode
 import dev.gokanaz.kplayer.feature.videopicker.screens.mediapicker.DurationFilter as VMDurationFilter
 import dev.gokanaz.kplayer.feature.videopicker.screens.mediapicker.ResolutionFilter as VMResolutionFilter
 import dev.gokanaz.kplayer.feature.videopicker.screens.mediapicker.DateFilter as VMDateFilter
@@ -100,16 +101,9 @@ fun FilterOptions.toViewModelType(): VMFilterOptions {
     )
 }
 
-fun dev.gokanaz.kplayer.core.model.MediaLayoutMode.toDisplayMode(): DisplayMode {
+fun CoreMediaLayoutMode.toDisplayMode(): DisplayMode {
     return when (this) {
-        dev.gokanaz.kplayer.core.model.MediaLayoutMode.GRID -> DisplayMode.Grid
-        dev.gokanaz.kplayer.core.model.MediaLayoutMode.LIST -> DisplayMode.List
-    }
-}
-
-fun dev.gokanaz.kplayer.core.model.MediaLayoutMode.toComposableLayoutMode(): MediaLayoutMode {
-    return when (this) {
-        dev.gokanaz.kplayer.core.model.MediaLayoutMode.GRID -> MediaLayoutMode.GRID
-        dev.gokanaz.kplayer.core.model.MediaLayoutMode.LIST -> MediaLayoutMode.LIST
+        CoreMediaLayoutMode.GRID -> DisplayMode.Grid
+        CoreMediaLayoutMode.LIST -> DisplayMode.List
     }
 }
