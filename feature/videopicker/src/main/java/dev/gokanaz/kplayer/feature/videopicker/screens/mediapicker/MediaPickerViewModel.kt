@@ -275,15 +275,15 @@ class MediaPickerViewModel @Inject constructor(
             }
             .sortedWith(
                 when (_sortOption.value) {
-                    SortType.NAME -> compareBy { it.title }
-                    SortType.DATE -> compareBy { it.dateAdded }
-                    SortType.SIZE -> compareBy { it.size }
-                    SortType.DURATION -> compareBy { it.duration }
-                    SortType.RESOLUTION -> compareBy { it.height * it.width }
-                    SortType.TYPE -> compareBy { it.mimeType }
-                    SortType.ARTIST -> compareBy { it.bucketDisplayName }
-                    SortType.ALBUM -> compareBy { it.fileName }
-                }.let { comparator ->
+                    SortType.NAME -> compareBy<Video> { it.title }
+                    SortType.DATE -> compareBy<Video> { it.dateAdded }
+                    SortType.SIZE -> compareBy<Video> { it.size }
+                    SortType.DURATION -> compareBy<Video> { it.duration }
+                    SortType.RESOLUTION -> compareBy<Video> { it.height * it.width }
+                    SortType.TYPE -> compareBy<Video> { it.mimeType }
+                    SortType.ARTIST -> compareBy<Video> { it.bucketDisplayName }
+                    SortType.ALBUM -> compareBy<Video> { it.fileName }
+                }.let { comparator: Comparator<Video> ->
                     if (_sortOrder.value == SortOrder.DESCENDING) {
                         comparator.reversed()
                     } else {
