@@ -3,8 +3,10 @@ package dev.gokanaz.kplayer.feature.videopicker.composables
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -40,7 +42,7 @@ fun TextIconToggleButton(
         animationSpec = tween(durationMillis = 200),
         label = "bg_color"
     )
-    
+
     val contentColor by animateColorAsState(
         targetValue = if (selected && enabled) {
             MaterialTheme.colorScheme.onPrimary
@@ -52,37 +54,37 @@ fun TextIconToggleButton(
         animationSpec = tween(durationMillis = 200),
         label = "content_color"
     )
-    
+
     val height by animateDpAsState(
         targetValue = size.height,
         animationSpec = tween(durationMillis = 200),
         label = "height"
     )
-    
+
     val padding by animateDpAsState(
         targetValue = size.padding,
         animationSpec = tween(durationMillis = 200),
         label = "padding"
     )
-    
+
     val iconSize by animateDpAsState(
         targetValue = size.iconSize,
         animationSpec = tween(durationMillis = 200),
         label = "icon_size"
     )
-    
+
     val fontSize by animateDpAsState(
         targetValue = size.fontSize.value.dp,
         animationSpec = tween(durationMillis = 200),
         label = "font_size"
     )
-    
+
     val elevation by animateDpAsState(
         targetValue = if (selected) size.elevation else 0.dp,
         animationSpec = tween(durationMillis = 200),
         label = "elevation"
     )
-    
+
     Surface(
         modifier = modifier
             .height(height)
@@ -111,13 +113,13 @@ fun TextIconToggleButton(
                 contentDescription = null,
                 modifier = Modifier.size(iconSize)
             )
-            
+
             Text(
                 text = text,
                 fontSize = fontSize.sp,
                 maxLines = 1
             )
-            
+
             if (selected) {
                 Icon(
                     imageVector = Icons.Default.Check,
@@ -172,7 +174,7 @@ enum class ToggleButtonSize(
         cornerRadius = 16.dp,
         elevation = 2.dp
     ),
-    
+
     Medium(
         height = 40.dp,
         padding = 16.dp,
@@ -182,7 +184,7 @@ enum class ToggleButtonSize(
         cornerRadius = 20.dp,
         elevation = 4.dp
     ),
-    
+
     Large(
         height = 48.dp,
         padding = 20.dp,
@@ -200,25 +202,24 @@ data class ToggleButtonOption(
     val icon: ImageVector
 )
 
-// Predefined toggle button configurations
 object ToggleButtons {
     val ViewMode = listOf(
         ToggleButtonOption("grid", "Grid", Icons.Default.ViewModule),
         ToggleButtonOption("list", "List", Icons.Default.ViewList)
     )
-    
+
     val SortType = listOf(
         ToggleButtonOption("name", "Name", Icons.Default.SortByAlpha),
         ToggleButtonOption("date", "Date", Icons.Default.DateRange),
         ToggleButtonOption("size", "Size", Icons.Default.DataUsage)
     )
-    
+
     val SelectionActions = listOf(
         ToggleButtonOption("select", "Select", Icons.Default.CheckBox),
         ToggleButtonOption("selectAll", "All", Icons.Default.SelectAll),
         ToggleButtonOption("clear", "Clear", Icons.Default.Clear)
     )
-    
+
     val FilterChips = listOf(
         ToggleButtonOption("all", "All", Icons.Default.FilterList),
         ToggleButtonOption("today", "Today", Icons.Default.Today),
@@ -244,7 +245,7 @@ fun GridListToggleButton(
             size = ToggleButtonSize.Small,
             modifier = Modifier.weight(1f)
         )
-        
+
         TextIconToggleButton(
             selected = isGrid,
             onSelectedChange = { onToggle(true) },
@@ -274,7 +275,7 @@ fun SortOrderToggleButton(
             size = ToggleButtonSize.Small,
             modifier = Modifier.weight(1f)
         )
-        
+
         TextIconToggleButton(
             selected = !isAscending,
             onSelectedChange = { onToggle(false) },
@@ -304,7 +305,7 @@ fun SelectionActionButtons(
             size = ToggleButtonSize.Small,
             modifier = Modifier.weight(1f)
         )
-        
+
         TextIconToggleButton(
             selected = false,
             onSelectedChange = { onClearAll() },

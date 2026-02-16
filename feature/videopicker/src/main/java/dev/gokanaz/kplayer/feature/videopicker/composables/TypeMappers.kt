@@ -2,6 +2,10 @@ package dev.gokanaz.kplayer.feature.videopicker.composables
 
 import dev.gokanaz.kplayer.core.model.SortType
 import dev.gokanaz.kplayer.core.model.SortOrder as CoreSortOrder
+import dev.gokanaz.kplayer.feature.videopicker.screens.mediapicker.DurationFilter as VMDurationFilter
+import dev.gokanaz.kplayer.feature.videopicker.screens.mediapicker.ResolutionFilter as VMResolutionFilter
+import dev.gokanaz.kplayer.feature.videopicker.screens.mediapicker.DateFilter as VMDateFilter
+import dev.gokanaz.kplayer.feature.videopicker.screens.mediapicker.FilterOptions as VMFilterOptions
 
 fun SortOption.toSortType(): SortType {
     return when (this) {
@@ -38,20 +42,60 @@ fun CoreSortOrder.toComposableType(): SortOrder {
     }
 }
 
-fun dev.gokanaz.kplayer.feature.videopicker.screens.mediapicker.FilterOptions.toComposableType(): FilterOptions {
+fun VMFilterOptions.toComposableType(): FilterOptions {
     return FilterOptions(
-        durationFilter = this.durationFilter,
-        resolutionFilter = this.resolutionFilter,
-        dateFilter = this.dateFilter,
+        durationFilter = when (this.durationFilter) {
+            VMDurationFilter.All -> DurationFilter.All
+            VMDurationFilter.LessThan5Min -> DurationFilter.LessThan5Min
+            VMDurationFilter.Between5And15Min -> DurationFilter.Between5And15Min
+            VMDurationFilter.Between15And30Min -> DurationFilter.Between15And30Min
+            VMDurationFilter.Between30And60Min -> DurationFilter.Between30And60Min
+            VMDurationFilter.MoreThan60Min -> DurationFilter.MoreThan60Min
+        },
+        resolutionFilter = when (this.resolutionFilter) {
+            VMResolutionFilter.All -> ResolutionFilter.All
+            VMResolutionFilter.Resolution480p -> ResolutionFilter.Resolution480p
+            VMResolutionFilter.Resolution720p -> ResolutionFilter.Resolution720p
+            VMResolutionFilter.Resolution1080p -> ResolutionFilter.Resolution1080p
+            VMResolutionFilter.Resolution4K -> ResolutionFilter.Resolution4K
+        },
+        dateFilter = when (this.dateFilter) {
+            VMDateFilter.All -> DateFilter.All
+            VMDateFilter.Today -> DateFilter.Today
+            VMDateFilter.ThisWeek -> DateFilter.ThisWeek
+            VMDateFilter.ThisMonth -> DateFilter.ThisMonth
+            VMDateFilter.ThisYear -> DateFilter.ThisYear
+            VMDateFilter.Custom -> DateFilter.Custom
+        },
         selectedFolders = this.selectedFolders
     )
 }
 
-fun FilterOptions.toViewModelType(): dev.gokanaz.kplayer.feature.videopicker.screens.mediapicker.FilterOptions {
-    return dev.gokanaz.kplayer.feature.videopicker.screens.mediapicker.FilterOptions(
-        durationFilter = this.durationFilter,
-        resolutionFilter = this.resolutionFilter,
-        dateFilter = this.dateFilter,
+fun FilterOptions.toViewModelType(): VMFilterOptions {
+    return VMFilterOptions(
+        durationFilter = when (this.durationFilter) {
+            DurationFilter.All -> VMDurationFilter.All
+            DurationFilter.LessThan5Min -> VMDurationFilter.LessThan5Min
+            DurationFilter.Between5And15Min -> VMDurationFilter.Between5And15Min
+            DurationFilter.Between15And30Min -> VMDurationFilter.Between15And30Min
+            DurationFilter.Between30And60Min -> VMDurationFilter.Between30And60Min
+            DurationFilter.MoreThan60Min -> VMDurationFilter.MoreThan60Min
+        },
+        resolutionFilter = when (this.resolutionFilter) {
+            ResolutionFilter.All -> VMResolutionFilter.All
+            ResolutionFilter.Resolution480p -> VMResolutionFilter.Resolution480p
+            ResolutionFilter.Resolution720p -> VMResolutionFilter.Resolution720p
+            ResolutionFilter.Resolution1080p -> VMResolutionFilter.Resolution1080p
+            ResolutionFilter.Resolution4K -> VMResolutionFilter.Resolution4K
+        },
+        dateFilter = when (this.dateFilter) {
+            DateFilter.All -> VMDateFilter.All
+            DateFilter.Today -> VMDateFilter.Today
+            DateFilter.ThisWeek -> VMDateFilter.ThisWeek
+            DateFilter.ThisMonth -> VMDateFilter.ThisMonth
+            DateFilter.ThisYear -> VMDateFilter.ThisYear
+            DateFilter.Custom -> VMDateFilter.Custom
+        },
         selectedFolders = this.selectedFolders
     )
 }
@@ -65,7 +109,7 @@ fun dev.gokanaz.kplayer.core.model.MediaLayoutMode.toDisplayMode(): DisplayMode 
 
 fun dev.gokanaz.kplayer.core.model.MediaLayoutMode.toComposableLayoutMode(): MediaLayoutMode {
     return when (this) {
-        dev.gokanaz.kplayer.core.model.MediaLayoutMode.GRID -> MediaLayoutMode.Grid
-        dev.gokanaz.kplayer.core.model.MediaLayoutMode.LIST -> MediaLayoutMode.List
+        dev.gokanaz.kplayer.core.model.MediaLayoutMode.GRID -> MediaLayoutMode.GRID
+        dev.gokanaz.kplayer.core.model.MediaLayoutMode.LIST -> MediaLayoutMode.LIST
     }
 }

@@ -3,6 +3,7 @@ package dev.gokanaz.kplayer.feature.videopicker.navigation
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -12,9 +13,6 @@ import androidx.navigation.compose.composable
 import dev.gokanaz.kplayer.feature.videopicker.screens.mediapicker.MediaPickerScreen
 import dev.gokanaz.kplayer.feature.videopicker.screens.mediapicker.MediaPickerViewModel
 
-/**
- * Sealed class representing all destinations in the media picker feature
- */
 sealed class MediaPickerDestination(
     val route: String
 ) {
@@ -22,19 +20,22 @@ sealed class MediaPickerDestination(
     data class Folder(
         val folderId: String,
         val folderName: String
-    ) : MediaPickerDestination("media_picker_folder/{folderId}/{folderName}") {
+    ) : MediaPickerDestination("media_picker_folder/$folderId/$folderName") {
         fun createRoute() = "media_picker_folder/$folderId/$folderName"
+        companion object {
+            const val routeTemplate = "media_picker_folder/{folderId}/{folderName}"
+        }
     }
-    data class Video(val videoId: String) : MediaPickerDestination("media_picker_video/{videoId}") {
+    data class Video(val videoId: String) : MediaPickerDestination("media_picker_video/$videoId") {
         fun createRoute() = "media_picker_video/$videoId"
+        companion object {
+            const val routeTemplate = "media_picker_video/{videoId}"
+        }
     }
     object Search : MediaPickerDestination("media_picker_search")
     object Settings : MediaPickerDestination("media_picker_settings")
 }
 
-/**
- * Extension functions for NavController to navigate between destinations
- */
 fun NavController.navigateToMediaPicker(
     startDestination: MediaPickerDestination = MediaPickerDestination.Main
 ) {
@@ -65,9 +66,6 @@ fun NavController.navigateToSettings() {
     navigate(MediaPickerDestination.Settings.route)
 }
 
-/**
- * NavHost for media picker feature
- */
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun MediaPickerNavHost(
@@ -106,7 +104,6 @@ fun MediaPickerNavHost(
             slideOutHorizontally(targetOffsetX = { it }) + fadeOut()
         }
     ) {
-        // Main screen
         composable(
             route = MediaPickerDestination.Main.route
         ) { entry ->
@@ -114,7 +111,7 @@ fun MediaPickerNavHost(
                 navController.getBackStackEntry(MediaPickerDestination.Main.route)
             }
             val viewModel: MediaPickerViewModel = hiltViewModel(parentEntry)
-            
+
             MediaPickerScreen(
                 viewModel = viewModel,
                 onFolderClick = { folderId, folderName ->
@@ -130,10 +127,9 @@ fun MediaPickerNavHost(
                 onNavigateBack = onNavigateBack
             )
         }
-        
-        // Folder screen
+
         composable(
-            route = MediaPickerDestination.Folder.route,
+            route = MediaPickerDestination.Folder.routeTemplate,
             arguments = listOf(
                 navArgument("folderId") { type = NavType.StringType },
                 navArgument("folderName") { type = NavType.StringType }
@@ -141,16 +137,16 @@ fun MediaPickerNavHost(
         ) { entry ->
             val folderId = entry.arguments?.getString("folderId") ?: return@composable
             val folderName = entry.arguments?.getString("folderName") ?: return@composable
-            
+
             val parentEntry = remember(entry) {
                 navController.getBackStackEntry(MediaPickerDestination.Main.route)
             }
             val viewModel: MediaPickerViewModel = hiltViewModel(parentEntry)
-            
+
             LaunchedEffect(folderId) {
                 viewModel.loadVideosInFolder(folderId)
             }
-            
+
             MediaPickerScreen(
                 viewModel = viewModel,
                 folderName = folderName,
@@ -162,8 +158,7 @@ fun MediaPickerNavHost(
                 }
             )
         }
-        
-        // Search screen
+
         composable(
             route = MediaPickerDestination.Search.route
         ) { entry ->
@@ -171,7 +166,7 @@ fun MediaPickerNavHost(
                 navController.getBackStackEntry(MediaPickerDestination.Main.route)
             }
             val viewModel: MediaPickerViewModel = hiltViewModel(parentEntry)
-            
+
             MediaPickerScreen(
                 viewModel = viewModel,
                 isSearchMode = true,
@@ -181,8 +176,7 @@ fun MediaPickerNavHost(
                 }
             )
         }
-        
-        // Settings screen
+
         composable(
             route = MediaPickerDestination.Settings.route
         ) { entry ->
@@ -190,9 +184,7 @@ fun MediaPickerNavHost(
                 navController.getBackStackEntry(MediaPickerDestination.Main.route)
             }
             val viewModel: MediaPickerViewModel = hiltViewModel(parentEntry)
-            
-            // Settings screen would be implemented here
-            // For now, just navigate back
+
             LaunchedEffect(Unit) {
                 navController.popBackStack()
             }
@@ -200,9 +192,6 @@ fun MediaPickerNavHost(
     }
 }
 
-/**
- * Navigation actions interface for better type safety
- */
 interface MediaPickerNavigationActions {
     fun navigateToFolder(folderId: String, folderName: String)
     fun navigateToVideo(videoId: String)
@@ -211,36 +200,30 @@ interface MediaPickerNavigationActions {
     fun navigateUp()
 }
 
-/**
- * Implementation of navigation actions
- */
 class MediaPickerNavigationActionsImpl(
     private val navController: NavController
 ) : MediaPickerNavigationActions {
     override fun navigateToFolder(folderId: String, folderName: String) {
         navController.navigateToFolder(folderId, folderName)
     }
-    
+
     override fun navigateToVideo(videoId: String) {
         navController.navigateToVideo(videoId)
     }
-    
+
     override fun navigateToSearch() {
         navController.navigateToSearch()
     }
-    
+
     override fun navigateToSettings() {
         navController.navigateToSettings()
     }
-    
+
     override fun navigateUp() {
         navController.navigateUp()
     }
 }
 
-/**
- * Get navigation actions from NavController
- */
 @Composable
 fun rememberMediaPickerNavigationActions(
     navController: NavController
