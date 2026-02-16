@@ -5,6 +5,7 @@ enum class SortType {
     DATE,
     SIZE,
     DURATION,
+    RESOLUTION,
     TYPE,
     ARTIST,
     ALBUM

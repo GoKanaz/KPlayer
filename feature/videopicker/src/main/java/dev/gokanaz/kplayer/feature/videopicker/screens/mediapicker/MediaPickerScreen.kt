@@ -1,6 +1,9 @@
 package dev.gokanaz.kplayer.feature.videopicker.screens.mediapicker
 
 import android.content.Context
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -25,10 +28,16 @@ import dev.gokanaz.kplayer.core.model.MediaViewMode
 import dev.gokanaz.kplayer.core.model.SortOrder
 import dev.gokanaz.kplayer.core.model.SortType
 import dev.gokanaz.kplayer.feature.videopicker.composables.*
+import dev.gokanaz.kplayer.feature.videopicker.composables.toSortOption
+import dev.gokanaz.kplayer.feature.videopicker.composables.toComposableType
+import dev.gokanaz.kplayer.feature.videopicker.composables.toSortType
+import dev.gokanaz.kplayer.feature.videopicker.composables.toCoreType
+import dev.gokanaz.kplayer.feature.videopicker.composables.toViewModelType
 import dev.gokanaz.kplayer.feature.videopicker.extensions.*
 import dev.gokanaz.kplayer.feature.videopicker.screens.MediaItem
-import dev.gokanaz.kplayer.feature.videopicker.screens.MediaState
 import kotlinx.coroutines.launch
+
+import android.content.Context
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -312,13 +321,13 @@ fun MediaPickerScreen(
             
             if (showSortFilter) {
                 QuickSettingDialog(
-                    currentSort = sortOption,
-                    currentSortOrder = sortOrder,
+                    currentSort = sortOption.toSortOption(),
+                    currentSortOrder = sortOrder.toComposableType(),
                     currentFilters = filterOptions,
                     onDismiss = { showSortFilter = false },
                     onApply = { sort, order, filters ->
-                        viewModel.updateSort(sort, order)
-                        viewModel.updateFilter(filters)
+                        viewModel.updateSort(sort.toSortType(), order.toCoreType())
+                        viewModel.updateFilter(filters.toViewModelType())
                         showSortFilter = false
                     }
                 )
