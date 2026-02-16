@@ -10,6 +10,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -19,7 +20,6 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun SelectionModeTopBar(
 fun MediaView(
     viewModel: VideoPickerViewModel = viewModel(),
     onVideoClick: (String) -> Unit = {},
@@ -60,9 +60,9 @@ fun MediaView(
                 onSortFilterClick = { showSortFilter = true },
                 onViewModeToggle = { viewModel.toggleDisplayMode() },
                 onSelectionClear = { viewModel.clearSelection() },
-                onSelectionDelete = { /* Handle delete */ },
-                onSelectionShare = { /* Handle share */ },
-                onSelectionAddToPlaylist = { /* Handle add to playlist */ },
+                onSelectionDelete = { },
+                onSelectionShare = { },
+                onSelectionAddToPlaylist = { },
                 onNavigationClick = onNavigateBack,
                 currentDisplayMode = uiState.displayMode
             )
@@ -79,7 +79,7 @@ fun MediaView(
         floatingActionButton = {
             if (!uiState.isSelectionMode) {
                 FloatingActionButton(
-                    onClick = { /* Handle scan */ },
+                    onClick = { },
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     contentColor = MaterialTheme.colorScheme.onPrimaryContainer
                 ) {
@@ -143,7 +143,6 @@ fun MediaView(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun SelectionModeTopBar(
 private fun MediaTopBar(
     title: String,
     isSelectionMode: Boolean,
@@ -190,7 +189,6 @@ private fun MediaTopBar(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun SelectionModeTopBar(
 internal fun DefaultTopBar(
     title: String,
     onSearchClick: () -> Unit,
@@ -244,7 +242,6 @@ internal fun DefaultTopBar(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun SelectionModeTopBar(
 internal fun SearchTopBar(
     query: String,
     onQueryChange: (String) -> Unit,
@@ -272,7 +269,7 @@ internal fun SearchTopBar(
             }
         },
         actions = {
-            IconButton(onClick = {}) {
+            IconButton(onClick = { }) {
                 Icon(
                     imageVector = Icons.Default.Clear,
                     contentDescription = "Clear"
@@ -285,7 +282,6 @@ internal fun SearchTopBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun SelectionModeTopBar(
-
     selectedCount: Int,
     onClearSelection: () -> Unit,
     onDelete: () -> Unit,
@@ -336,7 +332,6 @@ internal fun SelectionModeTopBar(
 }
 
 @Composable
-internal fun SelectionModeTopBar(
 private fun MediaBottomBar(
     viewMode: ViewMode,
     onViewModeChange: (ViewMode) -> Unit,
